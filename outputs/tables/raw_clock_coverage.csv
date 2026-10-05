@@ -1,0 +1,17 @@
+asset,asset_class,window,rows_outside_raw_clock_0930_to_1600,assessment,note
+AAPL,stocks,project,908842,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+AAPL,stocks,common,3232,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+GME,stocks,project,242860,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+GME,stocks,common,3654,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+SPY,etfs,project,1123343,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+SPY,etfs,common,4212,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+IWM,etfs,project,666086,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+IWM,etfs,common,3851,apparent_extended_clock_coverage_if_US_exchange_local_time,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+ES_Z24,futures,project,82996,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+ES_Z24,futures,common,9539,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+CL_Z24,futures,project,235410,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+CL_Z24,futures,common,9428,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+BTC,cryptos,project,3982955,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+BTC,cryptos,common,12600,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+ETH,cryptos,project,3512529,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed
+ETH,cryptos,common,12600,session_interpretation_unresolved,09:30 <= raw clock < 16:00 is a reference marker only; no timezone/session assumed

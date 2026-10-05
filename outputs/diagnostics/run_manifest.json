@@ -1,0 +1,31 @@
+{
+  "project_start": "2015-01-01",
+  "project_end": "2025-12-31",
+  "common_start": "2024-11-04",
+  "common_end": "2024-11-15",
+  "source_root": "G:\\.shortcut-targets-by-id\\12TUCISuW6Nv0d0b2wOR-h_LdVWDMFjzq\\data\\intraday_data",
+  "files": [
+    "stocks/AAPL_full_1min_adjsplitdiv.txt",
+    "stocks/GME_full_1min_adjsplitdiv.txt",
+    "etfs/SPY_full_1min_adjsplitdiv.txt",
+    "etfs/IWM_full_1min_adjsplitdiv.txt",
+    "futures/ES_Z24_1min.txt",
+    "futures/CL_Z24_1min.txt",
+    "cryptos/BTC_full_1min.txt",
+    "cryptos/ETH_full_1min.txt"
+  ],
+  "python": "3.12.10",
+  "pandas": "3.0.6",
+  "numpy": "2.5.3",
+  "inserted_minute_bars": 0,
+  "timestamp_timezone": "unresolved; naive recorded wall-clock timestamps",
+  "session": "none imposed",
+  "duplicate_policy": "retained and flagged",
+  "gap_policy": "stable chronological adjacent records, including overnight/weekend gaps and duplicate zero gaps",
+  "return_policy": "100*(close/previous close-1), within each window; positive finite consistent OHLC pairs, strictly increasing timestamps, no duplicate-affected pair; no forward filling",
+  "range_policy": "finite, positive, internally consistent OHLC rows; diagnostic validity mask only",
+  "price_volume_policy": "finite raw close/volume values, including flagged values; native units unverified",
+  "date_exclusions": "before 2015 and after 2025 counted only in file_scan_audit; no 2026 in summaries",
+  "flags": "<=10 rows on an observed day is a sparse-review marker, not an active-contract or completeness rule",
+  "failures": []
+}

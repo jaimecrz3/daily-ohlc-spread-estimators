@@ -1,0 +1,9 @@
+asset,asset_class,window,first_timestamp,last_timestamp,observed_rows,unique_timestamps,observed_calendar_days,calendar_days_in_window,calendar_dates_without_observations,inserted_minute_bars,timezone,session
+AAPL,stocks,common,2024-11-04 04:00:00,2024-11-15 19:59:00,7132,7132,10,12,2,0,unresolved,unfiltered raw clock
+GME,stocks,common,2024-11-04 04:02:00,2024-11-15 19:59:00,7553,7553,10,12,2,0,unresolved,unfiltered raw clock
+SPY,etfs,common,2024-11-04 04:00:00,2024-11-15 19:59:00,8112,8112,10,12,2,0,unresolved,unfiltered raw clock
+IWM,etfs,common,2024-11-04 04:00:00,2024-11-15 19:51:00,7751,7751,10,12,2,0,unresolved,unfiltered raw clock
+ES_Z24,futures,common,2024-11-04 00:00:00,2024-11-15 16:59:00,13439,13439,11,12,1,0,unresolved,unfiltered raw clock
+CL_Z24,futures,common,2024-11-04 00:00:00,2024-11-15 16:59:00,13328,13328,11,12,1,0,unresolved,unfiltered raw clock
+BTC,cryptos,common,2024-11-04 00:00:00,2024-11-15 23:59:00,17280,17280,12,12,0,0,unresolved,unfiltered raw clock
+ETH,cryptos,common,2024-11-04 00:00:00,2024-11-15 23:59:00,17280,17280,12,12,0,0,unresolved,unfiltered raw clock

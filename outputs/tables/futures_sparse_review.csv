@@ -1,0 +1,3 @@
+asset,first_observed_year,first_year_observed_days,first_year_median_rows,first_year_days_le10,last30_observed_days_median_rows,all_observed_days_le10,interpretation,threshold_note
+ES_Z24,2023,24,2.0,24,1375.0,75,Sparse early observations warrant review; active-contract onset NOT inferred,"<=10 observed rows/day is a descriptive review flag, not an exclusion/session rule"
+CL_Z24,2021,228,4.0,160,1355.5,190,Sparse early observations warrant review; active-contract onset NOT inferred,"<=10 observed rows/day is a descriptive review flag, not an exclusion/session rule"

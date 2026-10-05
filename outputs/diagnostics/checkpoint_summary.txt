@@ -1,0 +1,1 @@
+Checkpoint: 8/8 files scanned; 18,086,973 project rows; 91,875 common-window rows. 10 traceable checks passed. No minute bars filled; no estimators computed.

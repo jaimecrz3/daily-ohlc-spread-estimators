@@ -1,0 +1,9 @@
+asset,asset_class,observed_dates,total_rows,median_rows_per_observed_day,min_rows_per_observed_day,max_rows_per_observed_day,duplicate_rows,invalid_ohlc_rows,zero_volume_rows,timezone_status,session_status
+AAPL,stocks,10,7132,697.5,656,863,0,0,0,unresolved,unresolved; all recorded hours retained
+GME,stocks,10,7553,764.0,632,897,0,0,0,unresolved,unresolved; all recorded hours retained
+SPY,etfs,10,8112,805.5,763,917,0,0,0,unresolved,unresolved; all recorded hours retained
+IWM,etfs,10,7751,757.5,728,864,0,0,0,unresolved,unresolved; all recorded hours retained
+ES_Z24,futures,11,13439,1380.0,360,1380,0,0,0,unresolved,unresolved; all recorded hours retained
+CL_Z24,futures,11,13328,1361.0,357,1378,0,0,0,unresolved,unresolved; all recorded hours retained
+BTC,cryptos,12,17280,1440.0,1440,1440,0,0,0,unresolved,unresolved; all recorded hours retained
+ETH,cryptos,12,17280,1440.0,1440,1440,0,0,0,unresolved,unresolved; all recorded hours retained

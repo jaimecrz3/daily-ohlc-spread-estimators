@@ -1,0 +1,29 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Local / environment
+.env
+.DS_Store
+Thumbs.db
+
+# Provider data - NEVER COMMIT
+data/raw_bloomberg/
+data/interim/
+data/analytic/
+*.xlsx
+
+# Raw / licensed diagnostics
+outputs/diagnostics/*_flagged_rows.csv
+outputs/diagnostics/*_unassignable_rows.csv
+outputs/diagnostics/manual_checks.csv
+
+# Machine-specific paths / temporary files
+*.tmp
+*.log
+
+# IPython local profiles
+.ipython/
+**/.ipython/

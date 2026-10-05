@@ -1,0 +1,38 @@
+{
+  "output": "presentation\\MMF1941_Project1_Progress_Update.pptx",
+  "slides": 13,
+  "template_sha256": "8d94d09bb0da207ba6e7c2485e8fbf32d8a091eeefd8c3979c53d10d49bdcef3",
+  "template_unchanged": true,
+  "preserved": "Slide size, backgrounds, masters, layouts, theme, header/footer rules and accent bars",
+  "adapted": "Template prompts, illustrative charts and body tables replaced; 13 slides repurposed to requested sequence",
+  "numerical_source": "Accepted notebook CSV/PNG outputs; no new empirical analysis",
+  "dependencies": {
+    "presentation\\MMF_2026_Project_Progress_Update_Template.pptx": "8d94d09bb0da207ba6e7c2485e8fbf32d8a091eeefd8c3979c53d10d49bdcef3",
+    "outputs\\tables\\pilot_coverage.csv": "e839bc751c07ad1c97701447cfb77287aee743d571a8748d1494939762d1de95",
+    "outputs\\tables\\common_window_presentation_summary.csv": "c65646b78ba55596c57312106fb7dfab592f95c1d09d20c1b0391abca921fbf8",
+    "outputs\\tables\\data_quality_summary.csv": "b4dbc9cf0c1245aca6a809d101a7f7aa415faf98db857a3e486c9ebe8958bed4",
+    "outputs\\diagnostics\\file_scan_audit.csv": "878bbec3b932665aa2fa6f5e36cb203fe354bc337954eb80b86215fa9852aa82",
+    "outputs\\diagnostics\\manual_checks.csv": "0100bafe8e2e6b3c997609fec825cbbd71229700135c915385f99b358b469b38",
+    "outputs\\diagnostics\\pilot_schema.csv": "8eb182c20abf18c633213320c9d7db3843993222f819ab080b79b5c06a67a7ea",
+    "data\\raw_bloomberg\\bloomberg_pilot_AAPL_SPY_20241104_20241115.xlsx": "e9673edb37db8935e1d31eeac006b0f5111f8258017df481f9b38288e427f703",
+    "data\\raw_bloomberg\\bloomberg_pilot_AAPL_SPY_20241104_20241115_STATIC.xlsx": "358a84837aa6d5346b0e2ec4e9931040d7afba050e37e0ef1c2b2a1f9ef4d440",
+    "data\\raw_bloomberg\\bloomberg_pilot_AAPL_SPY_20241104_20241115_STATIC.sha256.txt": "198fa823c6e772f93909556b499f72a285b493927fb506c4260425d058557ddd",
+    "outputs\\figures\\common_window_bars_per_day.png": "7ca6a20bbb69b7e476c4719e87a85ae256268009ad2a9c701455893e0576e14b",
+    "outputs\\figures\\hourly_activity_by_asset_class.png": "a815276a1da63072aa177111a15b7f7507d02eafc8ff3731e217e6820674b166"
+  },
+  "bloomberg_source_log_rows": 26,
+  "bloomberg_hashes_verified": true,
+  "bloomberg_filename_note": "Logged '(1)' suffix absent locally; raw SHA-256 matches",
+  "manual_edits_recommended": [
+    "Add presenter name/date if desired",
+    "Review projector readability"
+  ],
+  "presenter": null,
+  "presentation_date": null,
+  "native_powerpoint_validation": {
+    "slides": 13,
+    "text_and_table_overflow_warnings": 0,
+    "render_review": "All 13 slides reviewed; final title verified after spacing correction",
+    "deck_sha256": "f1e9a63b3db51de45a629be26475fa9a51f619842a727a93944040dd31761426"
+  }
+}

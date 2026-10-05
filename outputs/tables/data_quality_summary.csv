@@ -1,0 +1,17 @@
+asset,asset_class,window,observed_rows,duplicate_excess_rows,missing_value_rows,non_numeric_rows,non_finite_rows,invalid_ohlc_rows,zero_volume_rows,negative_volume_rows,duplicate_timestamp_rows,missing_timestamp_rows,missing_open_rows,missing_high_rows,missing_low_rows,missing_close_rows,missing_volume_rows,non_numeric_open_rows,non_numeric_high_rows,non_numeric_low_rows,non_numeric_close_rows,non_numeric_volume_rows
+AAPL,stocks,project,1985723,0,0,0,0,0,94,0,0,0,0,0,0,0,0,0,0,0,0,0
+AAPL,stocks,common,7132,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+GME,stocks,project,1305630,0,0,0,0,0,1277,0,0,0,0,0,0,0,0,0,0,0,0,0
+GME,stocks,common,7553,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SPY,etfs,project,2200764,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SPY,etfs,common,8112,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+IWM,etfs,project,1741998,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+IWM,etfs,common,7751,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ES_Z24,futures,project,123342,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ES_Z24,futures,common,13439,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+CL_Z24,futures,project,428347,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+CL_Z24,futures,common,13328,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+BTC,cryptos,project,5480147,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+BTC,cryptos,common,17280,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ETH,cryptos,project,4821022,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ETH,cryptos,common,17280,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
