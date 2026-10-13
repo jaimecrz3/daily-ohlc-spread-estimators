@@ -2,7 +2,7 @@
 
 Run: python -B src/data_io.py
 Schema/dtypes are sample inferences, not a full-file validation. Field semantics
-are inferred from headerless OHLCV layout; timezone and volume units are unknown.
+are inferred from headerless OHLCV layout; class metadata come from provider documentation.
 No filtering, filling, session selection, or estimator calculations are performed.
 """
 from __future__ import annotations
@@ -29,6 +29,19 @@ PILOT_FILES = (
 )
 TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
 SCHEMA = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
+ASSET_METADATA = {
+    'stocks': dict(timezone='America/New_York', volume_units='shares', adjustment='split+dividend adjusted (*_adjsplitdiv)'),
+    'etfs': dict(timezone='America/New_York', volume_units='shares', adjustment='split+dividend adjusted (*_adjsplitdiv)'),
+    'futures': dict(timezone='America/New_York', volume_units='futures contracts', adjustment='unadjusted individual contracts'),
+    'cryptos': dict(timezone='UTC', volume_units='crypto units', adjustment='not specified by provider documentation'),
+}
+
+
+def asset_metadata(asset_class: str) -> dict:
+    """Return a copy of documented metadata; FX is deliberately unsupported."""
+    if asset_class not in ASSET_METADATA:
+        raise ValueError(f'Unsupported asset class: {asset_class}; FX remains inaccessible')
+    return dict(ASSET_METADATA[asset_class])
 
 
 def intraday_root() -> Path:
@@ -57,7 +70,7 @@ def infer_dtype(values: list[str]) -> str:
     if any(value == '' for value in values):
         return 'string (contains empty values)'
     if all(is_timestamp(value) for value in values):
-        return 'datetime (timezone unspecified; stored as text)'
+        return 'datetime (naive provider wall clock; timezone defined by asset class)'
     if all(re.fullmatch(r'[+-]?\d+', value) for value in values):
         return 'integer'
     try:
@@ -96,6 +109,9 @@ def inspect_file(root: Path, relative_path: str) -> dict:
     path = root / relative_path
     result = dict(asset_class=relative_path.split('/')[0], file=relative_path,
                   raw_path=str(path), exists=False, status='pending', error='')
+    result.update(asset_metadata(result['asset_class']))
+    result['metadata_basis'] = 'provider documentation supplied at design freeze'
+    result['provider_zero_volume_policy'] = 'zero-volume bars omitted; observed zero-volume rows retained and flagged'
     try:
         result['exists'] = path.is_file()
         if not result['exists']:
@@ -125,8 +141,6 @@ def inspect_file(root: Path, relative_path: str) -> dict:
         result['schema_basis'] = 'explicit header' if header else 'positional OHLCV inference; provider semantics unverified'
         result['inferred_dtypes_json'] = json.dumps({name: infer_dtype([row[i] for row in data if len(row) > i]) for i, name in enumerate(names)})
         result['timestamp_format'] = TIMESTAMP_FORMAT if data and all(row and is_timestamp(row[0]) for row in data) else 'undetermined/mixed'
-        result['timezone'] = 'not encoded; unresolved'
-        result['volume_units'] = 'unverified'
         last_line, tail_bytes = last_nonempty_line(path)
         last = next(csv.reader([last_line])) if last_line else []
         result['tail_bytes_read'] = tail_bytes
