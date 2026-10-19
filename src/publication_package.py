@@ -183,6 +183,7 @@ def format_docx(path):
         cols=len(t.columns);widths=[9.6/cols]*cols
         if cols==9:widths=[1.1,.6,.65,.85,.7,.65,.65,1.05,3.35]
         elif cols>=10:widths=[9.6/cols]*cols
+        if sum(widths)>9.6:widths=[w*9.6/sum(widths) for w in widths]
         for idx,col in enumerate(t.columns):col.width=Inches(widths[idx])
         for ri,r in enumerate(t.rows):
             if ri==0:
@@ -286,8 +287,11 @@ figure {margin:0;break-inside:avoid} figcaption {font-size:9pt;line-height:1.15}
     target=OUT/'final_paper_print.html';target.write_bytes(etree.tostring(document,encoding='utf-8',method='html',doctype='<!DOCTYPE html>'))
     # Keep the optional DOCX consistent with the same readable layout reflow.
     docx=ROOT/'paper/MMF1941_Project1_Final_Paper.docx'
-    subprocess.run([pypandoc.get_pandoc_path(),str(target),'-o',str(docx),'--standalone'],cwd=ROOT,capture_output=True,check=True)
+    for image in document.xpath('//img'):image.set('src',image.get('src').rsplit('/',1)[1])
+    docx_html=etree.tostring(document,encoding='utf-8',method='html')
+    subprocess.run([pypandoc.get_pandoc_path(),'-f','html','-o',str(docx),'--standalone','--resource-path='+str(ROOT/'outputs/figures')],input=docx_html,cwd=ROOT,capture_output=True,check=True)
     format_docx(docx)
+    with ZipFile(docx) as archive:assert len([n for n in archive.namelist() if n.startswith('word/media/') and not n.endswith('/')])==5
     print(target)
 
 
@@ -352,7 +356,8 @@ def candidates():
             notebook=json.loads(data)
             assert not any(c.get('outputs') for c in notebook['cells']),name
         if name=='README.md':assert not re.search(rb'\]\([A-Za-z]:[\\/]',data)
-        allowed.append(name);review.append(dict(relative_path=name,sha256=sha(p),size_bytes=p.stat().st_size,status='PUBLICATION_SAFE'))
+        allowed.append(name)
+        if name not in ['outputs/reproducibility/publication_candidate_review.csv','outputs/reproducibility/release_artifact_manifest.csv']:review.append(dict(relative_path=name,sha256=sha(p),size_bytes=p.stat().st_size,status='PUBLICATION_SAFE'))
     pd.DataFrame(review).to_csv(REPRO/'publication_candidate_review.csv',index=False)
     (OUT/'publication_candidates.json').write_text(json.dumps(allowed,indent=2),encoding='utf-8')
     print('PUBLICATION_SAFE_CANDIDATES',len(allowed))
@@ -390,8 +395,138 @@ Final source: `paper/MMF1941_Project1_Final_Paper.md`. Optional editable copy: `
     print('PAPER_PDF_QA_PASSED',len(doc),'pages')
 
 
+def release_reports():
+    check_lock()
+    history=json.loads((OUT/'history_cleanup.json').read_text())
+    text='# Git history cleanup report\n\n'
+    text+=f"Original task HEAD: `{history['original_head']}`. Audited recovery checkpoint before rewrite: `{history['pre_cleanup_checkpoint']}`. Rewritten checkpoint HEAD: `{history['new_cleanup_head']}`. The subsequent final release commit is identified by the published branch/tag, rather than a circular self-reference in this report.\n\n"
+    text+='Exact paths removed from ALL reachable local refs:\n\n'+''.join('- `'+name+'`\n' for name in OFFENDING)
+    text+='\nCommand: `.venv/Scripts/python.exe -B -m git_filter_repo --path notebooks/01_initial_exploratory_analysis.ipynb --path outputs/diagnostics/pilot_schema.csv --invert-paths --force`. Tool: git-filter-repo 2.47.0. No broad notebook/data-folder purge.\n\n'
+    text+='Verified external private backups: `../project_1_before_final_cleanup.bundle` and `../project_1_working_tree_before_cleanup.bundle`. Both were created and verified before rewriting. The second preserves the audited previously uncommitted working tree. These licensed-history recovery bundles must not be published or included in Drive delivery.\n\n'
+    text+=f"Origin was removed by the tool and restored unchanged: `{history['remote_url']}`. Both exact-path Git logs are empty; both known raw-excerpt blob IDs are absent from reachable objects. Current source/docs/aggregate results remain present. Public working-tree bytes and private local originals were preserved. Raw Bloomberg and frozen analytic hashes are unchanged.\n\n"
+    text+='Remote publication uses an explicit expected-old-SHA force-with-lease on main; unknown remote work must not be overwritten. No plain --force push is authorized. The cleanup addresses reachable repository history, not external clones or hosting caches.\n'
+    (REPRO/'git_history_cleanup_report.md').write_text(text,encoding='utf-8')
+    audit=REPRO/'publication_audit.md'
+    original=audit.read_text(encoding='utf-8').split('\n## Final release-tree audit')[0]
+    final='''
+## Final release-tree audit
+
+PASS for publication candidates. The public tree excludes data/**, raw workbooks, granular analytic/interim/error/prediction panels, fitted models, private diagnostics and the executed legacy notebook. Legitimate aggregate results/tables/figures and the supplied final presentation are retained. Candidate-file inventory and secret/raw-row pattern checks are saved in publication_candidate_review.csv; final checksums are in release_artifact_manifest.csv.
+
+The README contains portable public links and unchanged empirical text; only its administrative publication gate changed under explicit Step24 authorization. Safe method reviews/specifications are copied individually to docs/ and config/, never the complete diagnostics directory. FX path/error strings in the public copy are portability-redacted without changing the original freeze or analytical policy.
+
+Git histories were inspected for exact historical paths, then only the two confirmed raw-excerpt paths were filtered. Known offending blobs are unreachable. The raw-history backup stays private outside the repository. No secret-pattern hit or embedded workbook payload was found in the public candidates. The private raw excerpts are still retained locally, ignored and untracked.
+
+Paper source/PDF/DOCX and final PPTX exist. The PDF is visually and mechanically checked. No analytical result or raw provider file was edited. Full licensed-from-source reconstruction was not rerun; packaged code/configuration and the official shared source are required for that route. Public aggregates alone are insufficient.
+'''
+    final+='\nFinal public/index file count: '+str(len(git('ls-files').splitlines()))+'. The two checksum-inventory files are excluded from the candidate review checksum rows to avoid a circular dependency; the release inventory excludes only itself.\n'
+    audit.write_text(original+final,encoding='utf-8')
+    environment=subprocess.run([str(ROOT/'.venv/Scripts/python.exe'),'-m','pip','freeze'],capture_output=True,text=True,check=True).stdout
+    (REPRO/'publication_environment_requirements.txt').write_text(environment,encoding='utf-8')
+    source_note='''# Data sources
+
+Personally acquired immutable Bloomberg raw files are included only in the private Drive data/raw_bloomberg directory, with their existing relative filenames and SHA-256 registry. The eleven recorded hashes must match after copy. They are not published to GitHub and originals are never deleted or modified.
+
+First Rate/RiskLab stock, ETF, futures and crypto one-minute archives remain in the official Shared RiskLab source. Configure RISKLAB_DATA_ROOT to that mounted catalog. Those shared raw files are intentionally NOT duplicated in personal Drive. Official FX access remained blocked; no substitute FX data were used.
+
+Derived panels, observations, model artifacts, predictions and caches are not part of this delivery. Reconstruct them from licensed raw/shared sources plus code and frozen metadata in an isolated repository-shaped workspace as described in docs/PUBLICATION.md. No current delivery claim certifies a newly rerun full-source analysis.
+'''
+    (OUT/'README_data_sources.md').write_text(source_note,encoding='utf-8')
+    candidates()
+    paths=json.loads((OUT/'publication_candidates.json').read_text())
+    inventory=[dict(relative_path=name,sha256=sha(ROOT/name),size_bytes=(ROOT/name).stat().st_size,role='public code/methodology/aggregate/final document') for name in paths if name!='outputs/reproducibility/release_artifact_manifest.csv']
+    pd.DataFrame(inventory).to_csv(REPRO/'release_artifact_manifest.csv',index=False)
+    print('RELEASE_REPORTS_PREPARED',len(inventory))
+
+
+def deliver(drive_root):
+    # User's requested nesting is intentional: supplied root already ends in
+    # Project_1, and the final submission directory is its Project_1 child.
+    if not drive_root:raise ValueError('Explicit --drive-root is required; no machine-specific destination is embedded in public code')
+    base=Path(drive_root)
+    assert base.is_dir(),'Configured personal Drive root inaccessible'
+    destination=base/'Project_1'
+    destination.mkdir(exist_ok=True)
+    candidates_list=json.loads((OUT/'publication_candidates.json').read_text())
+    copied=[]
+    def copy(source,relative):
+        target=destination/relative
+        assert destination.resolve() in target.resolve().parents
+        target.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copy2(source,target)
+        assert sha(source)==sha(target),relative
+        copied.append(dict(relative_path=relative,sha256=sha(target),size_bytes=target.stat().st_size))
+    for name in candidates_list:
+        if name.startswith(('src/','tests/','config/','manifests/')):copy(ROOT/name,'code/'+name)
+        elif name.startswith('notebooks/'):
+            assert 'code_only' in name;copy(ROOT/name,'code/'+name)
+        elif name in ['README.md','design_decisions.md','data_manifest.csv','.gitignore','.gitattributes']:
+            copy(ROOT/name,'code/'+name)
+        elif name.startswith(('outputs/results/','outputs/tables/','outputs/figures/','outputs/reproducibility/')):copy(ROOT/name,name)
+        elif name.startswith('docs/'):copy(ROOT/name,'code/'+name)
+    # Include any public outputs created after candidate enumeration.
+    for p in REPRO.iterdir():
+        if p.is_file():copy(p,'outputs/reproducibility/'+p.name)
+    copy(REPRO/'environment_requirements.txt','code/environment_requirements.txt')
+    copy(REPRO/'publication_environment_requirements.txt','code/publication_environment_requirements.txt')
+    for extension in ['md','pdf','docx']:
+        p=ROOT/f'paper/MMF1941_Project1_Final_Paper.{extension}'
+        if p.exists():copy(p,'paper/'+p.name)
+    for name in ['MMF1941_Project1_Final_Presentation.pptx','final_presentation_content.md','final_presentation_outline.md','speaker_notes.md']:
+        copy(ROOT/'presentation'/name,'presentation/'+name)
+    raw=ROOT/'data/raw_bloomberg';registry=pd.read_csv(raw/'sha256_manifest.csv')
+    assert len(registry)==11
+    for r in registry.itertuples():
+        assert sha(raw/r.file_name)==r.sha256
+        copy(raw/r.file_name,'data/raw_bloomberg/'+r.file_name)
+        assert sha(destination/'data/raw_bloomberg'/r.file_name)==r.sha256
+    copy(raw/'sha256_manifest.csv','data/raw_bloomberg/sha256_manifest.csv')
+    copy(ROOT/'manifests/bloomberg_source_log.csv','data/raw_bloomberg/bloomberg_source_log_metadata.csv')
+    copy(OUT/'README_data_sources.md','data/README_data_sources.md')
+    (destination/'README.md').write_text('''# MMF 1941 Project 1 — final submission
+
+Which Daily OHLC Spread Estimator Tracks Realized Intraday Cost? A CS / AR / EDGE Horse-Race
+
+Start with [the delivery manifest](DELIVERY_MANIFEST.md), [the final paper](paper/MMF1941_Project1_Final_Paper.pdf), [the presentation](presentation/MMF1941_Project1_Final_Presentation.pptx), and [data-source notes](data/README_data_sources.md).
+
+The analytical repository README is preserved in [code/README.md](code/README.md). The code/ folder is separated from root data/outputs for delivery only: flatten it into a separate local repository-shaped workspace before reproduction. See [publication instructions](code/docs/PUBLICATION.md). Repository-relative source links assume that flattened layout; the self-contained PDF requires no reconstruction.
+
+This private submission includes student-acquired immutable Bloomberg raw data. Shared First Rate/RiskLab archives are not duplicated. Do not redistribute licensed observations or the raw-history recovery bundles publicly. No new analysis was run for publication.
+''',encoding='utf-8')
+    final_head=git('rev-parse','HEAD')
+    delivery=f'''# DELIVERY MANIFEST — MMF 1941 Project 1
+
+Which Daily OHLC Spread Estimator Tracks Realized Intraday Cost? A CS / AR / EDGE Horse-Race
+
+Repository: https://github.com/jaimecrz3/daily-ohlc-spread-estimators.git ; branch main; checkout at copy `{final_head}`. Final publication commit/tag and push verification are recorded in the post-push receipt. No repository visibility setting is changed by this package.
+
+Contents: code/src, tests, config, manifests, safe notebooks, public method reviews and environment records; aggregate outputs/results, tables, figures and reproducibility metadata; final paper MD/PDF/DOCX; supplied final PPTX and presentation notes. GitHub contains public code, methods, aggregates and final documents only, never licensed raw data or observation panels.
+
+Personally acquired Bloomberg: eleven immutable recorded raw acquisition files, exact bytes/relative names and source metadata, in data/raw_bloomberg. All eleven SHA-256 hashes match after copy. Original files remain intact. No First Rate raw files were copied: shared stock/ETF/futures/crypto minute sources stay in official RiskLab and resolve through RISKLAB_DATA_ROOT. FX access remained blocked; no substitute was used.
+
+Reproduction: flatten code/ contents and package outputs/data into a separate local repository-shaped workspace; restore required safe metadata and mount the official shared source. Follow code/docs/PUBLICATION.md and outputs/reproducibility/final_reproduction_guide.md. Never run new analysis inside the immutable delivery. Full-source reproduction requires licensed inputs and recorded provenance; it was not rerun during publication. Interim/analytic/provider-row/prediction/model panels and caches are intentionally absent.
+
+Paper: paper/MMF1941_Project1_Final_Paper.pdf and .md; optional .docx retained. Visual QA passed. Presentation: presentation/MMF1941_Project1_Final_Presentation.pptx; content/outline/speaker notes retained.
+
+Analytical status: Step 18 PRIMARY; Step 19 prespecified ROBUSTNESS; Step 20 DIAGNOSTIC; Step 21 final artifacts; Step 22 paper; Step 23 presentation content. Full local suite: 331 passed, 0 failed. Frozen aggregate/analytic results and raw Bloomberg hashes unchanged. No new statistical analysis or substitute FX source.
+
+Licensing: this private Drive contains student-acquired licensed Bloomberg files, which must remain unchanged and must not be redistributed publicly. Shared First Rate raw archives are referenced, not duplicated. External Git recovery bundles preserve old licensed history and are excluded. No .venv, interim/analytic panels, fitted models, predictions or unnecessary caches are included.
+'''
+    manifest=destination/'DELIVERY_MANIFEST.md';manifest.write_text(delivery,encoding='utf-8')
+    paths=[p for p in destination.rglob('*') if p.is_file()]
+    assert not any(any(part in ['.venv','__pycache__','.git'] for part in p.relative_to(destination).parts) for p in paths)
+    assert not any(p.relative_to(destination).as_posix().startswith(('outputs/diagnostics/','outputs/models/','data/interim/','data/analytic/')) for p in paths)
+    assert not any('intraday_data' in p.relative_to(destination).parts for p in paths)
+    assert all((destination/name).exists() for name in ['code/src','code/tests','code/config','code/manifests','outputs/results','outputs/tables','outputs/figures','outputs/reproducibility','paper/MMF1941_Project1_Final_Paper.pdf','presentation/MMF1941_Project1_Final_Presentation.pptx','DELIVERY_MANIFEST.md'])
+    report=dict(status='DRIVE_COPY_VERIFIED',destination=str(destination),raw_bloomberg_count=11,all_11_hashes_match=True,
+        first_rate_raw_copied=False,originals_moved_or_deleted=False,file_copy_checks=len(copied),no_caches_or_granular_panels=True)
+    (OUT/'drive_copy_verification.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+    print(json.dumps(report,indent=2))
+
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('phase',choices=['audit','paper','html','documentation','pdf-validation','candidates','check'])
+    parser=argparse.ArgumentParser();parser.add_argument('phase',choices=['audit','paper','html','documentation','pdf-validation','candidates','release-reports','deliver','check'])
+    parser.add_argument('--drive-root')
     args=parser.parse_args()
     if args.phase=='audit':audit()
     elif args.phase=='paper':paper()
@@ -399,4 +534,6 @@ if __name__=='__main__':
     elif args.phase=='documentation':documentation()
     elif args.phase=='pdf-validation':pdf_validation()
     elif args.phase=='candidates':candidates()
+    elif args.phase=='release-reports':release_reports()
+    elif args.phase=='deliver':deliver(args.drive_root)
     else:check_lock();print('FROZEN_ANALYTIC_AND_RAW_FILES_UNCHANGED')

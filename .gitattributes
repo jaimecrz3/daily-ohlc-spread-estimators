@@ -1,0 +1,3 @@
+# Frozen source/metadata hashes are byte based. Preserve existing LF/CRLF bytes
+# identically across checkout platforms instead of applying core.autocrlf.
+* -text
