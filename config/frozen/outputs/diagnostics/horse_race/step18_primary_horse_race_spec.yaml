@@ -1,0 +1,62 @@
+status: PRIMARY_HORSE_RACE_COMPLETE
+step: 18
+approval_date: '2026-10-17'
+input_panel: data/analytic/primary_provider_panel.parquet
+input_panel_sha256: 792817001bb30b95c9fd65ac61ba9a55de7d4db360a1b998f88bef439f83c27f
+accuracy_sample: common_defined_accuracy_sample == True
+expected_common_N: 24377
+weighting: Equal contributing asset-day
+error: primary estimator minus Roll
+hac_small_sample_correction: false
+hac_correction_basis: Explicit Step16 uncorrected multiplier 1
+hac_lag: min(floor(4*(T/100)^(2/9)), T-1)
+hac_kernel: Bartlett
+hac_score: n_t*(daily_mean_error_t-alpha)
+hac_variance: Bartlett score meat / sum(n_t)^2
+hac_time_order: Chronological distinct contributing dates; no empty-date synthesis
+hac_inference: Signed bias only; normal 95% CI, two-sided p-value
+failure_denominator: ALL design-eligible asset-days
+negative_denominator: finite computable RAW mathematical estimates among design-eligible
+  rows
+ranking: Separate min-tie ordinal MAE, RMSE, absolute-bias ranks; no composite
+new_filters: false
+post_hoc_exclusions: 0
+fx_status: IN_SCOPE_BUT_BLOCKED_OFFICIAL_SOURCE_ACCESS
+tests:
+  status: PASSED
+  passed: 289
+  failed: 0
+common_N: 24377
+design_N: 38232
+reporting_cells: 20
+accuracy_rows: 60
+manual_audits:
+- asset_class: stocks
+  asset: FCPT
+  target_date: '2022-10-11'
+  common_defined: false
+  audit_status: NOT_COMMON_DEFINED_NOT_REPLACED
+- asset_class: etfs
+  asset: PGJ
+  target_date: '2024-01-30'
+  common_defined: true
+  audit_status: PASSED
+- asset_class: futures
+  asset: GC
+  target_date: '2024-07-02'
+  common_defined: true
+  audit_status: PASSED
+- asset_class: crypto
+  asset: LINK
+  target_date: '2024-01-18'
+  common_defined: true
+  audit_status: PASSED
+- asset_class: stocks
+  asset: AIRG
+  target_date: '2022-10-11'
+  common_defined: true
+  audit_status: PASSED
+processing_seconds: 56.67965340000228
+raw_bloomberg_hashes_verified: 11
+observation_panel: data/analytic/primary_horse_race_common.parquet
+observation_level_outputs_git_ignored: true

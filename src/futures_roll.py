@@ -22,13 +22,11 @@ import pandas as pd
 try:
     from .data_io import intraday_root, is_timestamp
     from .eda_diagnostics import parse_chunk
-    from .session_rules import assign_primary_session
-    from .benchmark import build_roll_benchmark, summarize_roll_benchmark
+    from .session_rules import assign_primary_session, resolve_futures_session
 except ImportError:
     from data_io import intraday_root, is_timestamp
     from eda_diagnostics import parse_chunk
-    from session_rules import assign_primary_session
-    from benchmark import build_roll_benchmark, summarize_roll_benchmark
+    from session_rules import assign_primary_session, resolve_futures_session
 
 TZ = 'America/New_York'
 OUT = Path(__file__).resolve().parents[1] / 'outputs/diagnostics/futures_roll'
@@ -57,19 +55,21 @@ def parse_provider_calendar(path: Path) -> pd.DataFrame:
     return table
 
 
-def contract_file(directory: Path, root: str, code: str) -> Path:
-    if root not in {'ES', 'CL'} or not isinstance(code, str) or not CODE.fullmatch(code):
-        raise ValueError('Only ES/CL unadjusted individual contract codes allowed')
+def contract_file(directory: Path, root: str, code: str, *, allowed_roots=None) -> Path:
+    allowed = {'ES', 'CL'} if allowed_roots is None else set(allowed_roots)
+    if root not in allowed or not re.fullmatch(r'[A-Z0-9]+', root) or not isinstance(code, str) or not CODE.fullmatch(code):
+        raise ValueError('Only explicitly configured roots and unadjusted individual contract codes allowed')
     return Path(directory) / f'{root}_{code}_1min.txt'
 
 
-def session_bounds(trade_date):
+def session_bounds(trade_date, root='ES', futures_sessions=None):
     day = pd.Timestamp(trade_date).normalize()
-    return ((day - pd.Timedelta(days=1) + pd.Timedelta(hours=18)).tz_localize(TZ),
-            (day + pd.Timedelta(hours=17)).tz_localize(TZ))
+    config = resolve_futures_session(root, day, futures_sessions)
+    return ((day - pd.Timedelta(days=1) + pd.Timedelta(hours=config.start.hour, minutes=config.start.minute)).tz_localize(config.timezone),
+            (day + pd.Timedelta(hours=config.end.hour, minutes=config.end.minute)).tz_localize(config.timezone))
 
 
-def selection_plan(calendar: pd.DataFrame, root: str, start, end, directory: Path) -> pd.DataFrame:
+def selection_plan(calendar: pd.DataFrame, root: str, start, end, directory: Path, *, futures_sessions=None) -> pd.DataFrame:
     """Every requested calendar trade date is audited, even if no mapping exists.
 
     Diagnostic date rows are not synthetic bars or assumed exchange sessions.
@@ -79,8 +79,8 @@ def selection_plan(calendar: pd.DataFrame, root: str, start, end, directory: Pat
     for day in pd.date_range(start, end, freq='D'):
         record = mapping.loc[day] if day in mapping.index else None
         selected = record.selected_contract if record is not None else None
-        path = contract_file(directory, root, selected) if selected else None
-        begin, finish = session_bounds(day)
+        path = contract_file(directory, root, selected, allowed_roots=futures_sessions) if selected else None
+        begin, finish = session_bounds(day, root, futures_sessions)
         records.append(dict(root=root, trade_date=day.date(), timezone=TZ,
             session_start=begin, session_end=finish, selected_contract=selected,
             provider_mapping_date=day.date() if record is not None else None,
@@ -97,13 +97,13 @@ def empty_bars():
                          'trade_date': pd.Series(dtype=object), 'selected_contract': pd.Series(dtype=str)})
 
 
-def read_contract_window(path: Path, root: str, code: str, start, end, out: Path):
+def read_contract_window(path: Path, root: str, code: str, start, end, out: Path, *, futures_sessions=None):
     """Small pilot, then bounded full-file scan; retain diagnostic date range.
 
     Only window rows get OHLCV validation. Invalid timestamps on any scanned row
     are logged. Source fingerprints and read-only opens protect raw files.
     """
-    if path.name != contract_file(path.parent, root, code).name:
+    if path.name != contract_file(path.parent, root, code, allowed_roots=futures_sessions).name:
         raise ValueError('Unexpected price filename (continuous/adjusted files forbidden)')
     before = path.stat()
     with path.open('r', encoding='utf-8-sig', newline='') as stream:
@@ -139,7 +139,7 @@ def read_contract_window(path: Path, root: str, code: str, start, end, out: Path
     if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
         raise RuntimeError('Raw provider file changed during read')
     data = pd.concat(pieces) if pieces else empty_bars()
-    assigned = assign_primary_session(data, 'futures', futures_root=root)
+    assigned = assign_primary_session(data, 'futures', futures_root=root, futures_sessions=futures_sessions)
     assigned['source_contract'] = code
     assigned['duplicate_timestamp'] = assigned.timestamp.notna() & assigned.timestamp.duplicated(keep=False)
     flags = [c for c in ['missing_value', 'non_numeric', 'non_finite', 'invalid_ohlc', 'zero_volume', 'negative_volume', 'malformed_columns', 'duplicate_timestamp', 'timezone_assignment_failed'] if c in assigned]
@@ -208,6 +208,11 @@ def validate_sessions(plan: pd.DataFrame, contract_bars: dict[str, pd.DataFrame]
 
 def observed_roll_diagnostic(selected: pd.DataFrame, sessions: pd.DataFrame, root: str):
     """Analytic Roll rows are observed trade dates; empty dates stay in audit."""
+    # Keep contract/calendar/session utilities independent of benchmark imports.
+    try:
+        from .benchmark import build_roll_benchmark
+    except ImportError:
+        from benchmark import build_roll_benchmark
     daily, audit = build_roll_benchmark(selected, root, 'futures', futures_root=root,
                                        return_bar_audit=True)
     metadata = sessions.loc[sessions.bars_observed.gt(0),
@@ -285,6 +290,10 @@ def summarize_validation_outputs(out: Path):
 
 
 def main():
+    try:
+        from .benchmark import summarize_roll_benchmark
+    except ImportError:
+        from benchmark import summarize_roll_benchmark
     OUT.mkdir(parents=True, exist_ok=True)
     root_path = intraday_root() / 'futures'
     all_sessions, transitions, scans, failures, roll_days, mapping_audits = [], [], [], [], [], []

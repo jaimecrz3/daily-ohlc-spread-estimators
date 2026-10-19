@@ -1,0 +1,6 @@
+figure,source_result_files,dpi,display_clipping,analysis_recalculated
+figure1_estimator_vs_roll,"[""data/analytic/primary_horse_race_common.parquet""]",300,False,False
+figure2_error_distribution,"[""data/analytic/primary_horse_race_common.parquet""]",300,False,False
+figure3_relative_performance,"[""outputs/results/primary/primary_accuracy_results.csv""]",300,False,False
+figure4_benchmark_coverage,"[""outputs/results/primary/failure_rates.csv"", ""outputs/results/robustness/roll_quality_sensitivity.csv""]",300,False,False
+figure5_error_predictors,"[""outputs/results/error_model/feature_importance_stability.csv""]",300,False,False

@@ -1,0 +1,191 @@
+status: FROZEN_FOR_PROVIDER_ESTIMATION
+step: 15
+approval_date: '2026-10-16'
+global_design_reference: outputs/diagnostics/design_freeze/global_design_final_spec.yaml
+scope: Mathematical kernels and explicit ex-post daily mappings only; no provider
+  estimation or performance comparisons executed
+cs_formula:
+  constant: k=3-2*sqrt(2)
+  beta: log(H_b_adj/L_b_adj)^2 + log(H_a/L_a)^2 (SUM, not average)
+  gamma: log(max(H_b_adj,H_a)/min(L_b_adj,L_a))^2
+  alpha: (sqrt(2*beta)-sqrt(beta))/k - sqrt(gamma/k)
+  raw_interval: 2*(exp(alpha)-1)/(1+exp(alpha)) = 2*tanh(alpha/2)
+  stable_evaluation: Differences of logs and tanh identity, no price clipping or numerical-tolerance
+    zeroing
+  admissibility: Finite positive H/L and prior close; H>L on each session, prior close
+    within its own H/L; no empirical H/L>8 exclusion
+cs_overnight_policy:
+  prior_close_below_current_low: H_b_adj=H_b-(L_b-C_a); L_b_adj=C_a
+  prior_close_above_current_high: H_b_adj=C_a; L_b_adj=L_b+(C_a-H_b)
+  otherwise: Current H/L unchanged
+  previous_range: Use raw H_a/L_a, not its prior overnight-adjusted range
+  preprocessing_exception: 'Do not copy official CRSP range resets, price carry-forward,
+    absolute-close conversion or empirical ratio filter: frozen common policy forbids
+    repair/imputation and adds no such screen'
+cs_daily_mapping:
+  window:
+  - t-1
+  - t
+  - t+1
+  choice: PROJECT mapping supported by author stock-split event-study example, not
+    part of closed-form derivation
+  primary: mean(max(S_(t-1,t),0), max(S_(t,t+1),0)); BOTH intervals required
+  raw_daily: mean(S_(t-1,t), S_(t,t+1))
+  raw_negative: raw_daily < 0
+  raw_moment: Mean component alpha, diagnostic only; daily raw spread is mean of nonlinear
+    interval spreads
+  diagnostics:
+  - left/right beta, gamma, alpha, raw and corrected spreads
+  - negative component interval count
+  - overnight direction and adjusted ranges
+  required_fields: H/L at t-1,t,t+1; C at t-1,t. Future close and all opens unused
+cs_negative_policy: Floor each finite raw interval at zero BEFORE daily averaging;
+  negative raw daily flag retained independently; undefined never zero
+ar_formula:
+  eta: (log(H)+log(L))/2
+  s2: 4*(log(C_t)-eta_t)*(log(C_t)-eta_(t+1))
+  signed_raw: sign(s2)*sqrt(abs(s2))
+  source: Abdi--Ranaldo Eq.(9) and two-day correction Eq.(11)
+ar_daily_mapping:
+  target: close-t effective spread
+  window:
+  - t
+  - t+1
+  required_fields: H/L at t,t+1 and C_t only; C_(t+1) and opens unused
+  overnight_adjustment: none
+ar_negative_policy: sqrt(max(s2,0)); raw_negative iff s2<0; valid negative is defined
+  zero
+ar_imputation_policy: No carry-forward or high/low/range replacement. This differs
+  from author empirical zero-range/nontrading preprocessing; theoretical finite zero-range
+  moment remains admissible. Author preprocessing is later robustness only.
+edge_formula_reference:
+  paper: JFE 161 (2024) 103916; Section3 and Eq.(26)
+  repository: https://github.com/eguidotti/bidask
+  pinned_revision: 1caba55d63ebab6c855536be51c43bdfc48d2dec
+  pseudocode: sources/edge_pseudocode.md
+  intermediates:
+  - log O/H/L/C
+  - m
+  - r1
+  - r2
+  - r3
+  - r4
+  - r5
+  - tau
+  - po1
+  - po2
+  - pc1
+  - pc2
+  - pt
+  - po
+  - pc
+  - d1
+  - d3
+  - d5
+  - x1
+  - x2
+  - e1
+  - e2
+  - v1
+  - v2
+  - s2
+  variances: nanmean(x_i^2)-nanmean(x_i)^2; population moment variances, not ddof=1
+  s2: (v2*e1+v1*e2)/(v1+v2) if v1+v2>0 else (e1+e2)/2
+  admissibility: Grid length>=3; nansum(tau)>=2; po!=0; pc!=0; required scalar intermediates
+    and final estimate finite
+edge_window:
+  primary:
+  - t-1
+  - t
+  - t+1
+  length: 3
+  choice: PROJECT centered shortest admissible sample, not author recommendation;
+    ex-post measurement, not forecasting
+  interpretation: RMS spread over local three-session sample, assigned to center day;
+    temporal estimand differs from an instantaneous day-t spread
+  longer_windows: Future separately labeled robustness only; not executed
+edge_negative_primary_policy: sqrt(max(edge_s2_raw,0)); published paper Eq.(26); raw_negative
+  iff edge_s2_raw<0
+edge_abs_robustness_policy: Named edge_abs_root_robustness=sqrt(abs(edge_s2_raw));
+  fixture diagnostics only, never primary
+edge_missing_grid_policy: Keep NaNs in place; official nanmeans, no dropna compression.
+  General kernel reproduces the long missing fixture. Primary centered three-session
+  mapping requires its three source rows and required OHLC fields; missing rows/fields
+  fail explicitly, never filled.
+scheduled_adjacency_policy:
+  stocks_etfs: Step14 source_calendar_date_audit.csv class-specific PRE-intersection
+    union of observed source periods, not successful/common rows; weekends/market
+    non-sessions absent from that reference are not missing sessions
+  futures: Frozen 259 provider-mapped 2024 trade dates; no bridging unavailable rows
+    or contract fallback
+  crypto: Every UTC calendar day in study horizon; any missing source day breaks required
+    neighboring windows
+  grid_boundaries: No inferred neighbors beyond verified grid; missing_previous/next_scheduled_period
+    failure
+  context: Use verified source context outside primary evaluation calendar for required
+    lags/leads when available; evaluation endpoints remain Step14 dates
+  limitation: Stock/ETF union reference cannot certify a wholly missing market-wide
+    session absent from every existing source; no external holiday calendar invented
+  metadata_integrity: Verify Step14 reference artifact hashes before loading; no provider
+    price reads in loaders
+relative_spread_unit: Decimal dimensionless relative spread; 0.01 = 1 percent
+bps_conversion: 10000*primary_spread_relative; 0.01=100bps
+failure_rate_denominator: ALL design_eligible asset-days; Step14 unchanged
+negative_rate_denominator: 'For each estimator separately: design_eligible AND finite
+  computable RAW mathematical estimate; report denominator count. Numerator additionally
+  raw_negative=True. Undefined is not negative.'
+raw_negative_definitions:
+  CS: mean raw interval spreads < 0
+  AR: raw s2 < 0
+  EDGE: raw s2 < 0
+common_accuracy_sample: 'Step14 unchanged: design_eligible AND benchmark_defined AND
+  cs_defined AND ar_defined AND edge_defined'
+failure_reasons:
+- missing_required_field
+- non_finite_price
+- non_positive_price
+- invalid_ohlc_order
+- zero_range_not_admissible
+- incomplete_estimator_window
+- invalid_scheduled_adjacency
+- missing_previous_scheduled_period
+- missing_next_scheduled_period
+- missing_target_scheduled_period
+- insufficient_edge_observations
+- insufficient_edge_tau
+- zero_edge_po
+- zero_edge_pc
+- non_finite_intermediate
+- non_finite_estimate
+result_schema:
+- asset
+- target_date
+- estimator
+- raw_moment
+- raw_signed_spread_relative
+- raw_negative
+- raw_computable
+- primary_spread_relative
+- primary_spread_bps
+- estimator_defined
+- failure_reason
+- input_dates
+- input_observations
+- window_complete
+- scheduled_adjacency_valid
+- method_specific_diagnostics
+result_semantics:
+  raw_negative_when_undefined: null
+  failure_reason_when_defined: ''
+  window_complete: All required source rows and method-specific finite fields present;
+    positivity/order are separate admissibility checks
+  input_observations: Number of present physical source-day rows; not inserted analysis-view
+    placeholders
+  structural_programming_errors: Unknown method/class, mismatched arrays, duplicate/invalid
+    dates, ambiguous aliases or nonnumeric unnormalized tokens raise ValueError rather
+    than silently estimating
+remaining_statistical_decisions:
+- HAC lag and dependence/aggregation convention
+- Overall/group summary weighting; no result optimization
+no_provider_panel_estimation_executed: true
+no_benchmark_errors_or_performance_calculated: true

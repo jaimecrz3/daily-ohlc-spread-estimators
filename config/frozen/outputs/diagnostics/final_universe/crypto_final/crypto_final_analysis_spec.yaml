@@ -1,0 +1,68 @@
+status: FROZEN
+crypto_universe_status: FROZEN
+crypto_analysis_window_status: FROZEN
+approval_step: '12.2'
+selected_assets:
+- ICX
+- NEO
+- DASH
+- ZEC
+- ALGO
+- MKR
+- NEAR
+- LINK
+- DOGE
+liquidity_tiers:
+  LOW:
+  - ICX
+  - NEO
+  - DASH
+  MEDIUM:
+  - ZEC
+  - ALGO
+  - MKR
+  HIGH:
+  - NEAR
+  - LINK
+  - DOGE
+liquidity_calibration_year: 2024
+primary_common_start: '2022-02-01'
+primary_common_end: '2025-12-31'
+primary_common_dates: 1417
+primary_asset_days: 12753
+primary_design: Exact common valid observed UTC calendar across all nine frozen crypto
+  assets
+candidate_common_start: '2022-02-01'
+candidate_common_end: '2025-12-31'
+candidate_common_dates: 1417
+reconstruction_validation_passed: true
+block_reason: ''
+reconciliation_2024: historical/reconciliation_2024.csv; all dates, OHLCV, bar counts
+  and existing quality/validity fields checked against both Step9 and Step12
+numerical_reconciliation_tolerance:
+  rtol: 1.0e-12
+  atol: 1.0e-12
+exact_primary_calendar: historical/exact_common_dates.csv
+excluded_dates_inside_common_interval: 13
+excluded_date_audit: historical/excluded_common_interval_dates.csv
+study_start: '2015-01-01'
+study_end: '2025-12-31'
+historical_supplementary_role: Asset-specific valid history outside the common calendar
+  is supplementary historical/descriptive only; never pool changing composition as
+  a liquidity effect
+missing_day_policy: No filling, interpolation, carry-forward, synthesized daily observations
+  or compression; calendar-only absence rows are audits
+validity_policy: Existing aggregate_daily_ohlcv aggregation_valid only; invalid and
+  zero-volume/gap diagnostics preserved; zero volume/gaps do not themselves invalidate
+look_ahead_limitation: '2024 turnover-calibrated tiers applied before 2024 use future
+  information: look-ahead / ex-post classification and survivorship-style limitation'
+selection_timing: Frozen before any estimator/benchmark performance influenced selection;
+  no outcome-driven selection or reranking
+quote_basis_status: VERIFIED_COMMON_PROVIDER_QUOTE_BASIS
+quote_currency: UNKNOWN
+universe_specification: crypto_final_spec.yaml
+universe_specification_sha256: ca954be617468d3e242f43fc2ae23f5bcaf2b7230ceb378284786a9b6b627285
+no_benchmark_or_estimator_calculations: true
+source_adjustment: provider_unspecified; unchanged
+adequacy_policy: At least 730 exact common observations spanning two inclusive elapsed
+  years; calendar adequacy only, not a new asset/day quality rule

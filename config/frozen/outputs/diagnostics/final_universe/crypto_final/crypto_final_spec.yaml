@@ -1,0 +1,56 @@
+status: FROZEN
+quote_basis_validation_status: VERIFIED_COMMON_PROVIDER_QUOTE_BASIS
+quote_currency: UNKNOWN
+literal_usd_denomination_established: false
+quote_basis: empirically verified common provider quote basis
+liquidity_measure: provider-quote turnover proxy
+daily_turnover: UTC daily close * sum(observed one-minute base-crypto volume)
+liquidity_statistic: median observed 2024 daily turnover
+not_market_wide_trading_volume: true
+only_within_crypto_ranking: true
+timezone: UTC
+volume_unit: individual base-crypto units
+liquidity_calibration_year: 2024
+study_start: '2015-01-01'
+study_end: '2025-12-31'
+minimum_observed_2024_days: 300
+minimum_history_years: 3
+history_basis: inclusive observed endpoint span clipped to study window; not continuous
+  completeness
+source_quality_policy: Preserve every observed day and diagnostic; any invalid aggregation
+  or undefined turnover day blocks that asset from ranking; zero-volume rows are flagged,
+  not deleted
+explicit_crosses_excluded: true
+selection_policy: Ascending provider-quote turnover proxy, alphabetical asset tie;
+  np.array_split thirds; q=.25,.50,.75 target 1+q*(n-1); nearest currently unused
+  rank then alphabetic asset
+selected_assets:
+- ICX
+- NEO
+- DASH
+- ZEC
+- ALGO
+- MKR
+- NEAR
+- LINK
+- DOGE
+liquidity_tiers:
+  HIGH:
+  - NEAR
+  - LINK
+  - DOGE
+  LOW:
+  - ICX
+  - NEO
+  - DASH
+  MEDIUM:
+  - ZEC
+  - ALGO
+  - MKR
+common_quote_validation_rule: common_quote_validation_rule.yaml
+validation_rule_sha256: e0b6d0f2b2bfabbdaab9828af15a6de964acdbbeb12aaa1f15d4b581a48b6b77
+missing_bar_policy: no filling, imputation, synthesized days or gap compression
+no_benchmark_or_estimator_selection_inputs: true
+empirical_scope_limitation: Cross consistency directly tests BTC/ETH versus ETH-BTC
+  and named stablecoins; uniform naming supports common-basis interpretation, not
+  formal per-series currency certification

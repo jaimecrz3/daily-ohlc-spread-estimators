@@ -1,0 +1,17 @@
+{
+  "approval": "Explicit user Step21 documentation authorization; no analytic supersession",
+  "authorized_document_paths": [
+    "README.md",
+    "design_decisions.md",
+    "data_manifest.csv",
+    "manifests/data_manifest.csv"
+  ],
+  "authorized_document_sha256": {
+    "README.md": "1c1b90a4158dcd91d473a373278e4b91b1190b381df24e2a8d5b4a726ed1e395",
+    "design_decisions.md": "7acee34504e757414f6651899a6ab24184bb50a8be2e67e108603144129b2f7f",
+    "data_manifest.csv": "ab3daacb1039dac2a486030162c034905cd8d70f54a82194e7296af7c365ae76",
+    "manifests/data_manifest.csv": "ab3daacb1039dac2a486030162c034905cd8d70f54a82194e7296af7c365ae76"
+  },
+  "historical_test_snapshot": "outputs/reproducibility/historical_test_global_design_freeze.py.txt",
+  "publication_amendment": "Explicit Step24 publication authorization; only README publication-gate paragraph changed. Original Step21 receipt preserved separately; empirical prose and all numbers untouched."
+}

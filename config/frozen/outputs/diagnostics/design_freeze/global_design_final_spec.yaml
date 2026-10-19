@@ -1,0 +1,369 @@
+status: FROZEN_FOR_ESTIMATOR_IMPLEMENTATION
+approval_step: 14
+study_horizon:
+  start: '2015-01-01'
+  end: '2025-12-31'
+  interpretation: Study horizon; class-specific primary support, not a balanced all-class
+    2015-2025 panel
+asset_classes_in_scope:
+- stocks
+- etfs
+- futures
+- crypto
+- fx
+asset_class_status:
+  stocks: FROZEN
+  etfs: FROZEN
+  futures: FROZEN
+  crypto: FROZEN
+  fx: BLOCKED_OFFICIAL_SOURCE_ACCESS
+selected_assets_by_class:
+  stocks:
+  - IMDX
+  - AIRG
+  - CCBG
+  - ANGO
+  - SNDL
+  - FCPT
+  - FDS
+  - XPO
+  - BIDU
+  etfs:
+  - SDCI
+  - AAA
+  - JSML
+  - PGJ
+  - PJAN
+  - FSMD
+  - SPBO
+  - SCHM
+  - MCHI
+  futures:
+  - HG
+  - AD
+  - B6
+  - J1
+  - GC
+  - E6
+  - NQ
+  - ZF
+  - ES
+  crypto:
+  - ICX
+  - NEO
+  - DASH
+  - ZEC
+  - ALGO
+  - MKR
+  - NEAR
+  - LINK
+  - DOGE
+  fx: []
+liquidity_tiers:
+  stocks:
+    LOW:
+    - IMDX
+    - AIRG
+    - CCBG
+    MEDIUM:
+    - ANGO
+    - SNDL
+    - FCPT
+    HIGH:
+    - FDS
+    - XPO
+    - BIDU
+  etfs:
+    LOW:
+    - SDCI
+    - AAA
+    - JSML
+    MEDIUM:
+    - PGJ
+    - PJAN
+    - FSMD
+    HIGH:
+    - SPBO
+    - SCHM
+    - MCHI
+  futures:
+    LOW:
+    - HG
+    - AD
+    - B6
+    MEDIUM:
+    - J1
+    - GC
+    - E6
+    HIGH:
+    - NQ
+    - ZF
+    - ES
+  crypto:
+    LOW:
+    - ICX
+    - NEO
+    - DASH
+    MEDIUM:
+    - ZEC
+    - ALGO
+    - MKR
+    HIGH:
+    - NEAR
+    - LINK
+    - DOGE
+liquidity_calibration_year: 2024
+frozen_spec_references:
+  benchmark:
+    path: outputs/diagnostics/benchmark_freeze/benchmark_final_spec.yaml
+    sha256: 1ac1c3b715a6ce7ec7aaf6ab3855e4832153a4b2eef1fefecccdad12ddd5e590
+  daily_input:
+    path: outputs/diagnostics/daily_input_freeze/daily_input_final_spec.yaml
+    sha256: 0dbc5e1d2f950238f5db271f92401a7fac38e409ecafa6981f98f94ef5fd6bde
+  futures:
+    path: outputs/diagnostics/final_universe/futures_final/futures_final_spec.yaml
+    sha256: 23a72464a1c52c521070e6452cb239b4a198e2f83a5a04ee0dc7744693f2f264
+  crypto_universe:
+    path: outputs/diagnostics/final_universe/crypto_final/crypto_final_spec.yaml
+    sha256: ca954be617468d3e242f43fc2ae23f5bcaf2b7230ceb378284786a9b6b627285
+  crypto_calendar:
+    path: outputs/diagnostics/final_universe/crypto_final/crypto_final_analysis_spec.yaml
+    sha256: 86848aeeda51a551977d2f4855e41113947551286cb516df4a97c4bc3849f1c5
+  fx:
+    path: outputs/diagnostics/final_universe/fx_final/fx_final_spec.yaml
+    sha256: 27c769ffc638146275d4d5a5c871f17f4a122bb9136cf68ff05d3a387fd7b547
+stock_etf_source_calendar_policy:
+  local_session: Observed retained 09:30 <= America/New_York local time < 16:00 session
+    with bars_observed > 0
+  daily_source: Existing Bloomberg adjusted row
+  required_common_fields:
+  - PX_OPEN
+  - PX_HIGH
+  - PX_LOW
+  - PX_LAST
+  price_requirement: All four OHLC fields finite and strictly positive
+  excluded_outcome_gates:
+  - Roll values or definedness
+  - CS/AR/EDGE values or definedness
+  - estimator errors
+  - statistical significance
+  structural_errors: Duplicate/unassigned source dates block construction, never silently
+    deduplicated
+  no_new_quality_cutoffs: true
+primary_calendar_by_class:
+  stocks:
+    start: '2019-08-01'
+    end: '2025-12-31'
+    exact_common_dates: 1611
+    potential_design_eligible_asset_days: 14499
+    calendar_file: stocks_primary_calendar.csv
+    calendar_sha256: 30a694c574f7cae069e1e13b7f7ecd868d8276636db7942877150cc67a851d1d
+    definition: Nine-way exact source-available intersection; no Roll or estimator
+      outcome gate
+  etfs:
+    start: '2020-09-15'
+    end: '2025-12-31'
+    exact_common_dates: 961
+    potential_design_eligible_asset_days: 8649
+    calendar_file: etfs_primary_calendar.csv
+    calendar_sha256: 1725801a1ff4309a0bbed7df9ff29034cb4fba24b82c000ec1c93c3651685239
+    definition: Nine-way exact source-available intersection; no Roll or estimator
+      outcome gate
+  futures:
+    start: '2024-01-02'
+    end: '2024-12-31'
+    exact_common_dates: 259
+    potential_design_eligible_asset_days: 2331
+    calendar_file: futures_primary_calendar.csv
+    calendar_sha256: fbaaf5a2f8dec0512c2553a1bffbbc4322d08be8933dd5c86f1d191c6057e0a7
+    definition: Prior frozen exact calendar, unchanged
+  crypto:
+    start: '2022-02-01'
+    end: '2025-12-31'
+    exact_common_dates: 1417
+    potential_design_eligible_asset_days: 12753
+    calendar_file: crypto_primary_calendar.csv
+    calendar_sha256: 6fdcd6f745e4e8a092a5641aa2261a1cf5816b10a5cc2f2c145add9e6a5f4960
+    definition: Prior frozen exact calendar, unchanged
+daily_estimator_source_by_class:
+  stocks:
+    primary: Bloomberg adjusted OHLC
+    robustness: Bloomberg unadjusted OHLC
+    acquired_adjustment:
+      CapChg: T
+      CshAdjNormal: T
+      CshAdjAbnormal: UNKNOWN
+    First_Rate_role: RTH validation and benchmark-source infrastructure only
+  etfs:
+    same_as: stocks
+  futures: Daily OHLC from exact provider-selected unadjusted individual contract
+    and verified root-specific trade-date/session rules
+  crypto: Validated local provider one-minute OHLC aggregated by UTC calendar day
+  fx: BLOCKED; official RiskLab First Rate only
+benchmark_spec_reference: outputs/diagnostics/benchmark_freeze/benchmark_final_spec.yaml
+benchmark_spec_sha256: 1ac1c3b715a6ce7ec7aaf6ab3855e4832153a4b2eef1fefecccdad12ddd5e590
+benchmark_formula:
+  return: C_t / C_(t-1) - 1
+  adjacency_minutes: 1
+  covariance_lag: 1
+  ddof: 1
+  minimum_covariance_pairs: 2
+  negative_gamma: 2*sqrt(-gamma)
+  bps: 10000*relative
+  nonnegative_gamma: NaN; benchmark_defined=False; non_negative_autocovariance
+  insufficient_pairs: NaN; benchmark_defined=False; preserve failure reason
+  sessions: Existing latest verified class session specifications only; no cross-day/session/contract
+    pairs
+primary_roll_pair_threshold: 2
+higher_primary_pair_threshold_allowed: false
+design_eligible_definition: Frozen selected asset AND exact frozen class primary date
+  AND required source day/session exists; independent of all method outcomes
+benchmark_defined_definition: Only frozen Roll computability and strictly negative
+  lag-one covariance; undefined outcomes remain in design coverage
+estimator_defined_definition: Separate cs_defined, ar_defined, edge_defined and method-specific
+  failure reasons under each published/raw-output policy; not inferred from another
+  method
+common_defined_accuracy_sample_definition: design_eligible AND benchmark_defined AND
+  cs_defined AND ar_defined AND edge_defined
+failure_rate_denominator: All design_eligible asset-days, separately for Roll, CS,
+  AR and EDGE; no outcome conditioning
+missing_data_policy: No OHLC imputation, carry-forward, minute/day synthesis, gap
+  bridging or compression; preserve partial rows, source errors and all quality diagnostics;
+  estimator windows require valid scheduled adjacency
+corporate_action_policy:
+  evidence: Reuse Step-8 corporate_action_checks.csv; do not rerun factor detection
+  candidate_threshold: Existing Step-8 >=1% adjacent observed close adjustment-factor
+    change; audit screen only, not event identification or performance tuning
+  verified_example: SNDL 2022-07-26 saved acquisition reverse-split checks
+  primary_adjusted: All 61 empirical flags remain diagnostics only. No automatic exclusion;
+    only independently verified AND methodologically required event boundaries may
+    break primary windows.
+  unadjusted_robustness: Explicitly break the saved verified SNDL split; future verified
+    split/capital boundaries may be broken with documented evidence. Heuristic flags
+    alone never break windows.
+  primary_breaks_currently_imposed: 0
+  robustness_verified_breaks_currently_imposed: 1
+  incoming_edge_rule: An explicitly imposed event boundary is an incoming edge to
+    the first post-event session; diagnostic candidates do not imply a break.
+  missing_event_session: If an explicitly imposed boundary date is missing, the first
+    later observation receives the applicable role-specific break flag
+  exclusion_scope: Preserve source rows and diagnostic flags; no automatic event-month
+    deletion or heuristic exclusion; future primary breaks require verification and
+    a recorded methodological reason
+  identity: Factor candidates remain unverified; no inferred split/dividend labels
+  diagnostic_candidate_count: 61
+  general_guarantee: No complete corporate-action ledger or blanket price-continuity
+    guarantee is inferred from heuristic flags. Use saved vendor capital adjustment;
+    additional primary event breaks require verification and methodological necessity.
+futures_contract_policy:
+  missing_contract_policy: Source-unavailable dates remain audited; no substitution,
+    missing-bar filling or synthesized trade dates
+  continuous_price_policy: Individual unadjusted contracts only; all continuous-price
+    files, including back-adjusted files, prohibited
+  roll_mapping_policy: Exact provider daily trade-date mapping; one selected individual
+    contract for the entire overnight session; no forward-filled mapping or intraday
+    mixing
+  session_rule_policy:
+    timezone: America/New_York
+    primary_open: 18:00 previous calendar day inclusive
+    primary_close: 17:00 trade date exclusive
+    maintenance: 17:00 <= local time < 18:00 excluded
+    trade_date_assignment: 'time >=18:00: calendar date +1; time <17:00: calendar
+      date; maintenance excluded'
+    configuration: src/futures_historical_sessions.py:historical_configs; explicit
+      root-specific rules required
+    rules_artifact: historical/historical_session_rules.csv
+    primary_rule_ids:
+      HG: HG_2015-09-21_2025-12-31
+      AD: AD_2024-01-01_2024-12-31
+      B6: B6_2024-01-01_2024-12-31
+      J1: J1_2024-01-01_2024-12-31
+      GC: GC_2015-09-21_2025-12-31
+      E6: E6_2024-01-01_2024-12-31
+      NQ: NQ_2021-06-28_2025-12-31
+      ZF: ZF_2024-01-01_2024-12-31
+      ES: ES_2021-06-28_2025-12-31
+    historical_policy: Use verified date-effective intervals only; exclude/audit unresolved
+      dates; no extrapolation
+    equity_pause: ES/NQ pre-2021-06-28 pause remains historical only; no afternoon
+      pause in 2024
+    calendar_scope: Regular primary-session envelope; exhaustive historical holiday/early-close
+      settlement-date overrides remain uncertified
+crypto_quote_basis_policy:
+  status: VERIFIED_COMMON_PROVIDER_QUOTE_BASIS
+  quote_currency: UNKNOWN
+  literal_USD_claim_allowed: false
+fx_policy:
+  in_scope: true
+  status: BLOCKED_OFFICIAL_SOURCE_ACCESS
+  substitute_fx_allowed: false
+  professor_instruction_basis: Student-supplied professor instruction, Step14; no
+    independent verification claimed
+  submission_treatment: Continue other classes; document inaccessible official FX
+    and present completed components; student reports no penalty for this access limitation
+  not_intentional_class_exclusion: true
+  access_audit: outputs/diagnostics/final_universe/fx_final/fx_access_audit.csv
+primary_estimands:
+  future_outputs:
+  - bias versus Roll
+  - MAE
+  - RMSE
+  - estimator failure/undefined rate
+  - negative-estimate rate where meaningful under published/raw output definition
+  accuracy_definitions:
+    signed_error: estimate - Roll
+    bias: mean(signed_error)
+    MAE: mean(abs(signed_error))
+    RMSE: sqrt(mean(signed_error**2))
+    sample: Identical common_defined_accuracy_sample for all three methods
+  groupings:
+  - overall
+  - asset class
+  - liquidity tier
+  - asset class x liquidity tier
+  units:
+  - basis points
+  - relative price
+  accuracy_sample: common_defined_accuracy_sample
+  failure_sample: design_eligible
+  inferential_uncertainty: HAC standard errors
+  HAC_lag: PENDING_METHOD_CONVENTION_NOT_RESULT_OPTIMIZATION
+robustness_only_components:
+- Bloomberg unadjusted OHLC
+- cross-fitted error model
+- Prespecified later higher Roll-pair reliability cutoffs; never replace primary
+- Successive-observed-bar benchmark sensitivity, not primary
+- Method-specific author preprocessing replication if separately authorized
+supplementary_history_role: Earlier/later asset-specific history outside class primary
+  calendars is descriptive only; do not pool changing composition as a liquidity effect
+look_ahead_limitations:
+- All tiers use 2024 calibration; pre-2024 stocks/ETF/crypto labels are ex-post and
+  use future information
+- Futures primary comparison is conditional on the 2024 calibration year, not out
+  of sample
+- No benchmark or estimator performance influenced selection
+source_dependence_limitation: Futures and crypto daily OHLC and Roll share local one-minute
+  source; mechanical dependence must be discussed later
+remaining_pre_estimation_decisions:
+- Resolve estimator-specific published formulas, window lengths, warm-up requirements,
+  numerical tolerances, negative/raw-output treatment and failure reasons before provider
+  estimator calculation; never tune to outcomes.
+- Validate scheduled-session/date adjacency for each estimator window, including exchange
+  closures and omitted source sessions; common observed dates must never compress
+  gaps. Preserve context outside the evaluation calendar when needed for legitimate
+  lags; score endpoints only on frozen primary dates.
+- Specify HAC lag convention and applicable time-series aggregation/dependence structure
+  before inference; no empirical-result lag optimization or HAC implementation here.
+- Specify overall/group weighting and aggregation of errors plus the negative-estimate-rate
+  denominator and published-output meaning before producing summaries; never silently
+  use successful-only denominators for failure rates.
+- Retain IMDX/OCX stable-ID stitching uncertainty; no manual ticker-history stitching
+  or universe replacement. Source availability does not certify economic identity.
+- FX official access must be restored and its session, denomination and liquidity
+  comparability validated before an FX freeze; other four classes can proceed.
+implementation_scope: Global design frozen; statistical/numerical decisions listed
+  here must be resolved before relevant provider calculations or inference
+precedence: Step14 resolves prior comparison-eligibility pending fields and extends
+  earlier pilot-only session descriptions by reference to later freezes; prior artifacts
+  retained unchanged
+no_benchmark_or_estimator_values_calculated: true

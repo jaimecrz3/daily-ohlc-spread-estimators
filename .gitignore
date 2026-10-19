@@ -9,14 +9,25 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Provider / licensed data - NEVER COMMIT
-data/raw_bloomberg/
-data/interim/
-data/analytic/
+# PROVIDER / LICENSED / OBSERVATION-LEVEL DATA - NEVER COMMIT
+data/**
+!data/README.md
 *.xlsx
+*.xls
+*.xlsm
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.joblib
 
 # Generated diagnostics / derived provider outputs
 outputs/diagnostics/
+outputs/models/
+
+# Executed legacy notebook embeds licensed raw-row validation excerpts.
+# Share the separate code-only notebook instead; preserve this local original.
+notebooks/01_initial_exploratory_analysis.ipynb
 
 # Machine-specific paths / temporary files
 *.tmp

@@ -1,0 +1,25 @@
+status: BLOCKED
+step: 13
+official_source_only: true
+official_logical_path: intraday_data/fx
+official_path: ${RISKLAB_DATA_ROOT}/intraday_data/fx
+last_access_context: approved_outside_sandbox
+access_error_type: FileNotFoundError
+access_error: Official shared folder unavailable at design freeze; machine-specific
+  path retained only in the private original access audit.
+access_winerror: 3
+inventory_count: null
+eligible_count: null
+selected_pairs: []
+timezone_status: NOT_ASSESSED_ACCESS_BLOCKED
+daily_session_status: NOT_FROZEN_ACCESS_BLOCKED
+liquidity_comparability_status: NOT_ASSESSED_ACCESS_BLOCKED
+primary_common_calendar: null
+substitute_sources_permitted: false
+external_downloads_performed: false
+raw_data_modified: false
+benchmark_or_estimator_values_calculated: false
+blocked_reason: Official FX directory cannot be enumerated; stop before inventory
+  or methodology
+resume_requirement: Restore official folder access, then verify provider timezone,
+  pair direction, daily boundaries and comparable liquidity before selection

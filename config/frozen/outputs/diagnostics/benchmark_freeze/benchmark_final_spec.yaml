@@ -1,0 +1,117 @@
+status: final_benchmark_definition_frozen
+benchmark_name: Roll (1984) percentage-return benchmark
+literature_reference:
+  author: Richard Roll
+  year: 1984
+  journal: Journal of Finance
+  volume: 39
+  issue: 4
+  pages: 1127-1139
+  doi: 10.1111/j.1540-6261.1984.tb03897.x
+  percentage_form_location: Section II and footnote 5, page 1130
+  url: https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.1984.tb03897.x
+  primary_article_copy: https://www.bauer.uh.edu/rsusmel/phd/roll1984.pdf
+price_input: one-minute First Rate bar close; sampled transaction-price proxy, not
+  tick-level transactions
+return_definition: r_t = close_t / close_(t-1) - 1 (decimal simple arithmetic return)
+primary_mode: exact_one_minute
+required_gap_minutes: 1
+pair_definition: three consecutive retained observations with both adjacent gaps exactly
+  one minute and both returns eligible; within asset-session-day only
+covariance_lag: 1
+covariance_ddof: 1
+minimum_covariance_pairs: 2
+covariance_calculation: sum((x_i-mean(x))*(y_i-mean(y))) / (n_pairs-1); x=current
+  eligible paired returns, y=their actual immediately preceding returns; means calculated
+  separately on paired vectors
+nonnegative_covariance_policy: preserve gamma; spread_relative=NaN; spread_bps=NaN;
+  benchmark_defined=false; failure_reason=non_negative_autocovariance
+output_units:
+  roll_autocovariance: decimal return squared
+  roll_spread_relative: dimensionless fraction
+  roll_spread_bps: basis points; relative times 10000
+session_source: src/session_rules.py; previously approved session freezes; no new
+  calendars or products
+sessions:
+  stocks: 09:30 <= America/New_York local time < 16:00
+  etfs: 09:30 <= America/New_York local time < 16:00
+  cryptos: UTC calendar day; diagnostic/pilot only until universe freeze
+  futures: 'ES and CL pilots only: prior day 18:00 inclusive through trade date 17:00
+    exclusive America/New_York; exact provider-selected individual contract'
+  fx: unavailable official archive; no substitution
+missing_bar_policy: no filling, resampling or insertion; keep sparse/missing/invalid/duplicate/zero-volume
+  flags
+gap_bridge_policy: never bridge longer gaps or invalid observations in primary benchmark
+zero_volume_policy: retain and flag; valid positive prices remain return-eligible;
+  never synthesize zero-volume bars
+price_eligibility: finite positive close, assigned timezone, no duplicate timestamp/malformed
+  row/supplied invalid OHLC flag; invalid observations break chain rather than being
+  compressed away
+return_eligibility: finite simple return greater than -1; numerical overflow/underflow/rounding
+  failure flagged and masked
+structural_minimum_bars_for_one_lag_pair: 3
+minimum_bars_if_one_complete_contiguous_run: 4
+whole_day_quality_exclusion: none; sufficient remaining valid pairs may define a benchmark
+  despite other flagged observations
+failed_asset_day_policy: retain every observed session-day; zero-observation dates
+  remain audit-only and are not insufficient-pair analytic rows
+canonical_fields:
+  defined: benchmark_defined (alias of roll_defined)
+  failure_reason: failure_reason (detailed primary reason)
+  legacy_failure_reason: benchmark_failure_reason preserves existing insufficient_roll_pairs
+    compatibility label
+diagnostic_flags: coexisting booleans; a structural shortage and its source cause
+  can both be true; failure_reason follows CSV precedence
+sensitivity:
+  mode: successive_observed_bars
+  role: robustness_sensitivity_only
+  status: prepared_not_implemented_or_executed
+  primary: false
+  planned_return_definition: simple returns on successive observed eligible bars,
+    allowing positive gaps longer than one minute; invalid observations still break
+    chain
+  planned_pairs: adjacent observed return pairs inside the same verified session-day;
+    never cross sessions, days or contracts
+  limitation: heterogeneous return durations; record gap durations separately; no
+    performance comparison or replacement of primary
+  execution_guard: explicit NotImplementedError from build_roll_benchmark until separately
+    authorized sensitivity implementation
+performance_tuning: false
+universe_selection_using_benchmark: false
+pending_review:
+- primary-comparison eligibility, minimum-pair reliability threshold, coverage and
+  quality filters remain unfrozen
+- transaction-close proxy and Roll efficiency/stationarity assumptions
+- small-sample precision; mathematical minimum is not a reliability threshold
+- corporate-action-adjusted intraday price scale and source lineage for comparisons
+- sparse sessions and omitted-volume-bar sampling; no coverage cutoff tuned here
+- full futures/crypto universes remain unfrozen; FX unavailable
+freeze_scope: benchmark formula and mathematical computability only
+approval:
+  request: Step 10.1
+  date: '2026-10-14'
+negative_covariance_formula: roll_spread_relative = 2 * sqrt(-gamma); roll_spread_bps
+  = 10000 * roll_spread_relative
+computability:
+  minimum_covariance_pairs: 2
+  meaning: mathematical sample-covariance computability only; not statistical precision
+    or comparison eligibility
+  quality_exclusion_scope: invalid observations break chains; remaining valid pairs
+    determine computability
+primary_comparison_eligibility:
+  status: not_frozen
+  minimum_covariance_pairs: null
+  minimum_coverage: null
+  quality_filter_policy: not_frozen
+  automatic_inclusion_when_computable: false
+  diagnostics_preserved:
+  - roll_pairs
+  - bars_observed
+  - one_minute_returns
+  - max_gap_minutes
+  - gaps_gt_one_minute
+  - zero_volume_rows
+  - invalid_price_rows
+  - invalid_return_rows
+  - source_quality_condition
+  - all existing coverage and quality diagnostics

@@ -1,0 +1,51 @@
+status: FROZEN_FOR_PRIMARY_PROVIDER_RUN
+approval_step: 16
+approval_date: '2026-10-16'
+primary_weighting: ASSET_DAY_WEIGHTED
+bias_definition: (1/N)*sum_(i,t) Error_(i,t)
+mae_definition: (1/N)*sum_(i,t) abs(Error_(i,t))
+rmse_definition: sqrt((1/N)*sum_(i,t) Error_(i,t)^2)
+error_definition: Estimate_(i,t) - RollBenchmark_(i,t); not calculated in Step16
+accuracy_sample: design_eligible AND benchmark_defined AND cs_defined AND ar_defined
+  AND edge_defined
+failure_rate_denominator: ALL design_eligible asset-days; Step14 unchanged
+negative_rate_denominator: 'For each estimator separately: design_eligible AND finite
+  computable RAW mathematical estimate; report denominator count. Numerator additionally
+  raw_negative=True. Undefined is not negative.'
+imdx_identity_policy: source_defined_history_retained_without_manual_stitching
+imdx_identity_continuity_certified: false
+fx_status: IN_SCOPE_BUT_BLOCKED_OFFICIAL_SOURCE_ACCESS
+substitute_fx_allowed: false
+global_design_reference: outputs/diagnostics/design_freeze/global_design_final_spec.yaml
+estimator_spec_reference: outputs/diagnostics/estimator_freeze/estimator_formula_spec.yaml
+existing_windows_adjacency_negative_and_failure_policies: Step14 and Step15 unchanged;
+  this step resolves only weighting, inference convention and IMDX treatment
+provider_estimation_executed: false
+hac_inference_executed: false
+precedence: Step16 resolves earlier pending weighting/HAC/identity decisions; earlier
+  frozen artifacts are preserved unchanged
+reporting_cells:
+- overall
+- asset class
+- liquidity tier
+- asset class x liquidity tier
+within_cell_weight: One equal weight per common-defined asset-day; N counts contributing
+  asset-days in that cell
+prohibited_primary_weights:
+- market capitalization
+- turnover
+- volume
+- liquidity rank
+- minute bar count
+- inverse variance
+- equal-asset weighting
+equal_asset_summaries: Possible separately labeled later robustness only; not primary
+  and not run here
+accuracy_metrics:
+- BIAS
+- MAE
+- RMSE
+unit_policy: 'Use one consistent scale in a cell: relative spread or bps; no mixing'
+no_new_observation_filters: true
+negative_but_computable: Defined, including zero-floor primary outputs; never an estimator
+  failure

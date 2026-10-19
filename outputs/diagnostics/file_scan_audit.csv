@@ -1,9 +1,0 @@
-asset,asset_class,file,raw_rows_scanned,malformed_column_rows,unparseable_timestamp_rows,rows_before_2015,rows_after_2025,project_rows,raw_size_bytes,raw_mtime_ns,backward_steps_in_raw_order,duplicate_excess_rows
-AAPL,stocks,stocks/AAPL_full_1min_adjsplitdiv.txt,4013591,0,0,2026523,1345,1985723,235406937,1767654152000000000,0,0
-GME,stocks,stocks/GME_full_1min_adjsplitdiv.txt,2423753,0,0,1117119,1004,1305630,130314910,1767654160000000000,0,0
-SPY,etfs,etfs/SPY_full_1min_adjsplitdiv.txt,4482535,0,0,2279938,1833,2200764,274255159,1767655162000000000,0,0
-IWM,etfs,etfs/IWM_full_1min_adjsplitdiv.txt,3309636,0,0,1566114,1524,1741998,199631993,1767655158000000000,0,0
-ES_Z24,futures,futures/ES_Z24_1min.txt,123342,0,0,0,0,123342,6973559,1767237446000000000,0,0
-CL_Z24,futures,futures/CL_Z24_1min.txt,428347,0,0,0,0,428347,20312156,1767237376000000000,0,0
-BTC,cryptos,cryptos/BTC_full_1min.txt,5960820,0,0,473477,7196,5480147,364742905,1767662324000000000,0,0
-ETH,cryptos,cryptos/ETH_full_1min.txt,4828217,0,0,0,7195,4821022,288278265,1767662566000000000,0,0

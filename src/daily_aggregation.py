@@ -45,6 +45,7 @@ def flag(data, name):
 def aggregate_daily_ohlcv(data: pd.DataFrame, asset: str, asset_class: str, *,
                           source_file: str = '', futures_root: str | None = None,
                           futures_audit: pd.DataFrame | None = None,
+                          futures_sessions=None,
                           return_bar_audit: bool = False):
     """Aggregate every observed frozen-session day, including flagged days.
 
@@ -73,7 +74,8 @@ def aggregate_daily_ohlcv(data: pd.DataFrame, asset: str, asset_class: str, *,
         columns += ['selected_contract', 'source_contract']
         if 'root' in data:
             columns += ['root']
-    annotated = assign_primary_session(data[columns], asset_class, futures_root=futures_root).reset_index(drop=True)
+    annotated = assign_primary_session(data[columns], asset_class, futures_root=futures_root,
+        futures_sessions=futures_sessions).reset_index(drop=True)
     annotated['source_row'] = data.index.to_numpy()
     numeric = annotated[OHLCV].apply(pd.to_numeric, errors='coerce').astype(float)
     annotated['missing_value'] = flag(annotated, 'missing_value') | annotated[OHLCV].isna().any(axis=1)
@@ -135,7 +137,8 @@ def aggregate_daily_ohlcv(data: pd.DataFrame, asset: str, asset_class: str, *,
                 raise ValueError('Observed futures day absent from provider-selection audit')
             selected = mapping.loc[day]
             code = group.selected_contract.iloc[0]
-            expected = contract_file(Path(selected.contract_file).parent, futures_root, code)
+            expected = contract_file(Path(selected.contract_file).parent, futures_root, code,
+                allowed_roots=futures_sessions)
             if (selected.selected_contract != code or selected.root != futures_root
                     or selected.validation_status != 'ok' or selected.bars_observed != len(group)
                     or pd.isna(selected.provider_mapping_date)

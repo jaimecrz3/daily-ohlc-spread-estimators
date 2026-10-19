@@ -1,0 +1,94 @@
+status: CROSSFITTED_ERROR_MODEL_COMPLETE
+step: 20
+role: ROBUSTNESS_DIAGNOSTIC_ONLY
+primary_reference: Step18 unchanged
+source_common_N: 24377
+model: HistGradientBoostingRegressor
+parameters:
+  loss: squared_error
+  learning_rate: 0.05
+  max_iter: 200
+  max_leaf_nodes: 15
+  min_samples_leaf: 30
+  l2_regularization: 1.0
+  early_stopping: false
+  random_state: 1941
+targets:
+- absolute_error_bps
+- signed_error_bps
+features:
+- asset_class
+- liquidity_tier
+- asset
+- log_close
+- log1p_daily_volume
+- hl_range_bps
+- abs_open_close_bps
+- roll_pair_coverage
+- benchmark_bar_coverage
+- minute_gap_indicator
+folds: 5
+fold_assignment: np.array_split(sorted unique common target dates,5); no shuffle
+embargo_fraction: 0.01
+embargo_count_rule: ceil(.01*full unique common date count)
+purge: Exact closed actual input-interval union across all test assets; overlaps removed
+  globally
+preprocessing: TRAINING-ONLY numeric median and OneHotEncoder(handle_unknown=ignore);
+  no scaling
+missing_numeric_rule: No finite training median => fold failure; no sample deletion;
+  no global fitted preprocessing
+permutation_repeats: 5
+permutation_seed: 1941
+permutation_metric:
+  absolute_error_bps: increase in TEST MAE
+  signed_error_bps: increase in TEST RMSE
+permutation_rank_ties: average; top3 iff rank<=3; fold std ddof=1
+shift: +1 previous SCHEDULED observation within asset, not future/next observation
+  or previous available/common row
+placebo_information_policy: Same date folds and purge/embargo algorithm; include lagged
+  feature date in information interval (extends AR start)
+prediction_policy: No clipping, including finite negative predicted absolute-error
+  values
+tuning: false
+random_state: 1941
+computational_threads: 1
+feature_selection: false
+raw_writes: 0
+new_raw_or_intraday_reads: 0
+fx_status: IN_SCOPE_BUT_BLOCKED_OFFICIAL_SOURCE_ACCESS
+total_unique_dates: 2057
+embargo_dates: 21
+source_daily_sha256:
+  data/interim/bloomberg/daily_adjusted.parquet: 61aeaf93f3a12d4b61a48ebb2ada77ea83f3abaa471be3949494e062f111cb2d
+  outputs/diagnostics/final_universe/futures_final/historical/HG_historical_daily_ohlcv.csv: 5490750c19a6f935b525f38ee4f52ae904c2903a3fd292d993b82efc764b39c0
+  outputs/diagnostics/final_universe/futures_final/historical/AD_historical_daily_ohlcv.csv: 25c059e5f5d4f7c25621e3f2714eddbc951d758cb6303125a46cedf04552fde8
+  outputs/diagnostics/final_universe/futures_final/historical/B6_historical_daily_ohlcv.csv: ba6bee0150df340bfc9412b789abacfe070a721a85e1ae20ce7ca7f5168d5170
+  outputs/diagnostics/final_universe/futures_final/historical/J1_historical_daily_ohlcv.csv: 33b8e5fb3c396dceb29ad8b1466956b2444a8dc4740655288d7d418d4ddc36ef
+  outputs/diagnostics/final_universe/futures_final/historical/GC_historical_daily_ohlcv.csv: 21848bfeaa5bb0deecb53c8718943aec130626d9601a96a57b4d2b9d0a2c799c
+  outputs/diagnostics/final_universe/futures_final/historical/E6_historical_daily_ohlcv.csv: f2e84eae147c3fbf9cfcacc6c2205454310f451992faba790ddb1f244f0bb170
+  outputs/diagnostics/final_universe/futures_final/historical/NQ_historical_daily_ohlcv.csv: eb70438df7020dc2b189567b39083096a00f50dc7f61298c094ce998aa7cbe81
+  outputs/diagnostics/final_universe/futures_final/historical/ZF_historical_daily_ohlcv.csv: 77369a78442e2e5d528a67bdd0955f68b61a9d88ca2578f4d813ba51822bb1a5
+  outputs/diagnostics/final_universe/futures_final/historical/ES_historical_daily_ohlcv.csv: caa119dc3a4889183d2ba6fab23746afc483432dbc7c1b0a84b6b202927d6e05
+  outputs/diagnostics/final_universe/crypto_final/historical/ICX_historical_daily_ohlcv.csv: b0c38cc229717327aad21547ed166747e1f9c2bc537ef6b9a34d299c232af3e5
+  outputs/diagnostics/final_universe/crypto_final/historical/NEO_historical_daily_ohlcv.csv: 138594d829d3323cc7e494b2e38d1c78b50b1470db96d3fecb11e616c366a367
+  outputs/diagnostics/final_universe/crypto_final/historical/DASH_historical_daily_ohlcv.csv: a95387e736b257c1e15cceb86c4088f03118d9f5a01773376aa0645a34dd677d
+  outputs/diagnostics/final_universe/crypto_final/historical/ZEC_historical_daily_ohlcv.csv: cc835be2df19bc076dac4d9295dd435a66a29b87e5082987994115cf9a3301bd
+  outputs/diagnostics/final_universe/crypto_final/historical/ALGO_historical_daily_ohlcv.csv: 7aa89a9ce6438f700f488facbd2a5ab5444a319f5165f807bda7afaec6be354c
+  outputs/diagnostics/final_universe/crypto_final/historical/MKR_historical_daily_ohlcv.csv: 75baec2ad6485b7691a94def5a578564b35ec9bc5aa182be997f4a5ed90f6b0a
+  outputs/diagnostics/final_universe/crypto_final/historical/NEAR_historical_daily_ohlcv.csv: 8ad55fcf989e21405070dd3458f6302fcc4e25686c41b31b73c03f3acb3092a2
+  outputs/diagnostics/final_universe/crypto_final/historical/LINK_historical_daily_ohlcv.csv: 620060487732ed9d5485182d274dfc85ca747ed2cc729ac286a62ed0a739ce18
+  outputs/diagnostics/final_universe/crypto_final/historical/DOGE_historical_daily_ohlcv.csv: 7cdacd441a12765b49fc5ab8e247ea9ddb318ce2ec6c83b2b9d8253a57330609
+tests:
+  status: PASSED
+  passed: 318
+  failed: 0
+failed_folds: 0
+raw_bloomberg_hashes_verified: 11
+prior_results_unchanged: true
+processing_seconds: 267.5538255000138
+environment:
+  python: 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit
+    (AMD64)]
+  sklearn: 1.9.1
+  numpy: 2.5.3
+  pandas: 3.0.6

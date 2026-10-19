@@ -1,0 +1,375 @@
+status: FROZEN
+futures_universe_status: FROZEN
+primary_analysis_window_status: FROZEN
+approval_basis: User Step 11.3; no new selection or evidence search
+selected_roots:
+- HG
+- AD
+- B6
+- J1
+- GC
+- E6
+- NQ
+- ZF
+- ES
+liquidity_tiers:
+  LOW:
+  - HG
+  - AD
+  - B6
+  MEDIUM:
+  - J1
+  - GC
+  - E6
+  HIGH:
+  - NQ
+  - ZF
+  - ES
+liquidity_calibration_year: 2024
+primary_analysis_start: '2024-01-02'
+primary_analysis_end: '2024-12-31'
+primary_common_dates: 259
+primary_asset_days: 2331
+primary_design: 2024 common observed calendar; all nine roots on the same observed
+  trade dates
+observational_unit: asset-trade_date
+primary_common_trade_dates:
+- '2024-01-02'
+- '2024-01-03'
+- '2024-01-04'
+- '2024-01-05'
+- '2024-01-08'
+- '2024-01-09'
+- '2024-01-10'
+- '2024-01-11'
+- '2024-01-12'
+- '2024-01-15'
+- '2024-01-16'
+- '2024-01-17'
+- '2024-01-18'
+- '2024-01-19'
+- '2024-01-22'
+- '2024-01-23'
+- '2024-01-24'
+- '2024-01-25'
+- '2024-01-26'
+- '2024-01-29'
+- '2024-01-30'
+- '2024-01-31'
+- '2024-02-01'
+- '2024-02-02'
+- '2024-02-05'
+- '2024-02-06'
+- '2024-02-07'
+- '2024-02-08'
+- '2024-02-09'
+- '2024-02-12'
+- '2024-02-13'
+- '2024-02-14'
+- '2024-02-15'
+- '2024-02-16'
+- '2024-02-19'
+- '2024-02-20'
+- '2024-02-21'
+- '2024-02-22'
+- '2024-02-23'
+- '2024-02-26'
+- '2024-02-27'
+- '2024-02-28'
+- '2024-02-29'
+- '2024-03-01'
+- '2024-03-04'
+- '2024-03-05'
+- '2024-03-06'
+- '2024-03-07'
+- '2024-03-08'
+- '2024-03-11'
+- '2024-03-12'
+- '2024-03-13'
+- '2024-03-14'
+- '2024-03-15'
+- '2024-03-18'
+- '2024-03-19'
+- '2024-03-20'
+- '2024-03-21'
+- '2024-03-22'
+- '2024-03-25'
+- '2024-03-26'
+- '2024-03-27'
+- '2024-03-28'
+- '2024-04-01'
+- '2024-04-02'
+- '2024-04-03'
+- '2024-04-04'
+- '2024-04-05'
+- '2024-04-08'
+- '2024-04-09'
+- '2024-04-10'
+- '2024-04-11'
+- '2024-04-12'
+- '2024-04-15'
+- '2024-04-16'
+- '2024-04-17'
+- '2024-04-18'
+- '2024-04-19'
+- '2024-04-22'
+- '2024-04-23'
+- '2024-04-24'
+- '2024-04-25'
+- '2024-04-26'
+- '2024-04-29'
+- '2024-04-30'
+- '2024-05-01'
+- '2024-05-02'
+- '2024-05-03'
+- '2024-05-06'
+- '2024-05-07'
+- '2024-05-08'
+- '2024-05-09'
+- '2024-05-10'
+- '2024-05-13'
+- '2024-05-14'
+- '2024-05-15'
+- '2024-05-16'
+- '2024-05-17'
+- '2024-05-20'
+- '2024-05-21'
+- '2024-05-22'
+- '2024-05-23'
+- '2024-05-24'
+- '2024-05-27'
+- '2024-05-28'
+- '2024-05-29'
+- '2024-05-30'
+- '2024-05-31'
+- '2024-06-03'
+- '2024-06-04'
+- '2024-06-05'
+- '2024-06-06'
+- '2024-06-07'
+- '2024-06-10'
+- '2024-06-11'
+- '2024-06-12'
+- '2024-06-13'
+- '2024-06-14'
+- '2024-06-17'
+- '2024-06-18'
+- '2024-06-19'
+- '2024-06-20'
+- '2024-06-21'
+- '2024-06-24'
+- '2024-06-25'
+- '2024-06-26'
+- '2024-06-27'
+- '2024-06-28'
+- '2024-07-01'
+- '2024-07-02'
+- '2024-07-03'
+- '2024-07-04'
+- '2024-07-05'
+- '2024-07-08'
+- '2024-07-09'
+- '2024-07-10'
+- '2024-07-11'
+- '2024-07-12'
+- '2024-07-15'
+- '2024-07-16'
+- '2024-07-17'
+- '2024-07-18'
+- '2024-07-19'
+- '2024-07-22'
+- '2024-07-23'
+- '2024-07-24'
+- '2024-07-25'
+- '2024-07-26'
+- '2024-07-29'
+- '2024-07-30'
+- '2024-07-31'
+- '2024-08-01'
+- '2024-08-02'
+- '2024-08-05'
+- '2024-08-06'
+- '2024-08-07'
+- '2024-08-08'
+- '2024-08-09'
+- '2024-08-12'
+- '2024-08-13'
+- '2024-08-14'
+- '2024-08-15'
+- '2024-08-16'
+- '2024-08-19'
+- '2024-08-20'
+- '2024-08-21'
+- '2024-08-22'
+- '2024-08-23'
+- '2024-08-26'
+- '2024-08-27'
+- '2024-08-28'
+- '2024-08-29'
+- '2024-08-30'
+- '2024-09-02'
+- '2024-09-03'
+- '2024-09-04'
+- '2024-09-05'
+- '2024-09-06'
+- '2024-09-09'
+- '2024-09-10'
+- '2024-09-11'
+- '2024-09-12'
+- '2024-09-13'
+- '2024-09-16'
+- '2024-09-17'
+- '2024-09-18'
+- '2024-09-19'
+- '2024-09-20'
+- '2024-09-23'
+- '2024-09-24'
+- '2024-09-25'
+- '2024-09-26'
+- '2024-09-27'
+- '2024-09-30'
+- '2024-10-01'
+- '2024-10-02'
+- '2024-10-03'
+- '2024-10-04'
+- '2024-10-07'
+- '2024-10-08'
+- '2024-10-09'
+- '2024-10-10'
+- '2024-10-11'
+- '2024-10-14'
+- '2024-10-15'
+- '2024-10-16'
+- '2024-10-17'
+- '2024-10-18'
+- '2024-10-21'
+- '2024-10-22'
+- '2024-10-23'
+- '2024-10-24'
+- '2024-10-25'
+- '2024-10-28'
+- '2024-10-29'
+- '2024-10-30'
+- '2024-10-31'
+- '2024-11-01'
+- '2024-11-04'
+- '2024-11-05'
+- '2024-11-06'
+- '2024-11-07'
+- '2024-11-08'
+- '2024-11-11'
+- '2024-11-12'
+- '2024-11-13'
+- '2024-11-14'
+- '2024-11-15'
+- '2024-11-18'
+- '2024-11-19'
+- '2024-11-20'
+- '2024-11-21'
+- '2024-11-22'
+- '2024-11-25'
+- '2024-11-26'
+- '2024-11-27'
+- '2024-11-28'
+- '2024-11-29'
+- '2024-12-02'
+- '2024-12-03'
+- '2024-12-04'
+- '2024-12-05'
+- '2024-12-06'
+- '2024-12-09'
+- '2024-12-10'
+- '2024-12-11'
+- '2024-12-12'
+- '2024-12-13'
+- '2024-12-16'
+- '2024-12-17'
+- '2024-12-18'
+- '2024-12-19'
+- '2024-12-20'
+- '2024-12-23'
+- '2024-12-24'
+- '2024-12-26'
+- '2024-12-27'
+- '2024-12-30'
+- '2024-12-31'
+primary_scope: 2024 futures comparison only; not a full 2015-2025 futures horse race
+design_reason: Verified common temporal support reduces major calendar-period and
+  product-composition confounding across LOW/MEDIUM/HIGH tiers
+historical_supplementary_roots:
+- HG
+- GC
+- NQ
+- ES
+historical_supplementary_role: Verified longer panels retained for supplementary historical/descriptive
+  analysis only
+supplementary_pooling_policy: Never pool heterogeneous historical support with the
+  primary 2024 panel and attribute differences solely to liquidity
+unresolved_historical_roots:
+- AD
+- B6
+- J1
+- E6
+- ZF
+unresolved_historical_intervals:
+- start: '2015-01-01'
+  end: '2023-12-31'
+- start: '2025-01-01'
+  end: '2025-12-31'
+missing_contract_policy: Source-unavailable dates remain audited; no substitution,
+  missing-bar filling or synthesized trade dates
+continuous_price_policy: Individual unadjusted contracts only; all continuous-price
+  files, including back-adjusted files, prohibited
+roll_mapping_policy: Exact provider daily trade-date mapping; one selected individual
+  contract for the entire overnight session; no forward-filled mapping or intraday
+  mixing
+session_rule_policy:
+  timezone: America/New_York
+  primary_open: 18:00 previous calendar day inclusive
+  primary_close: 17:00 trade date exclusive
+  maintenance: 17:00 <= local time < 18:00 excluded
+  trade_date_assignment: 'time >=18:00: calendar date +1; time <17:00: calendar date;
+    maintenance excluded'
+  configuration: src/futures_historical_sessions.py:historical_configs; explicit root-specific
+    rules required
+  rules_artifact: historical/historical_session_rules.csv
+  primary_rule_ids:
+    HG: HG_2015-09-21_2025-12-31
+    AD: AD_2024-01-01_2024-12-31
+    B6: B6_2024-01-01_2024-12-31
+    J1: J1_2024-01-01_2024-12-31
+    GC: GC_2015-09-21_2025-12-31
+    E6: E6_2024-01-01_2024-12-31
+    NQ: NQ_2021-06-28_2025-12-31
+    ZF: ZF_2024-01-01_2024-12-31
+    ES: ES_2021-06-28_2025-12-31
+  historical_policy: Use verified date-effective intervals only; exclude/audit unresolved
+    dates; no extrapolation
+  equity_pause: ES/NQ pre-2021-06-28 pause remains historical only; no afternoon pause
+    in 2024
+  calendar_scope: Regular primary-session envelope; exhaustive historical holiday/early-close
+    settlement-date overrides remain uncertified
+methodological_limitations:
+- 2024 is also the liquidity-calibration year; primary futures analysis is conditional
+  on that calendar year
+- This is not an out-of-sample liquidity-tier evaluation
+- Historical sessions for AD/B6/J1/E6/ZF outside 2024 remain unresolved
+- Missing late-2025 individual contracts remain source-unavailable
+- No substitutions or extrapolated session rules permitted
+- Common dates reduce calendar confounding but do not remove product-family/root confounding
+  or one-year regime limitations
+raw_data_policy: Immutable; no modification or duplication
+no_provider_benchmark_or_estimator_calculations: true
+provenance:
+  selected_universe_sha256: b105882e761efedca71d28a4a93f93dc6b9f5ede8b2ffec2b05090e2584127be
+  session_rules_sha256: 2ebb6e6d07ab679d3f1d9af8755b0c9dcbd92222081de2338f441cae216c0b44
+  input_daily_panel_sha256:
+    outputs/diagnostics/final_universe/futures_final/historical/HG_historical_daily_ohlcv.csv: 5490750c19a6f935b525f38ee4f52ae904c2903a3fd292d993b82efc764b39c0
+    outputs/diagnostics/final_universe/futures_final/historical/AD_historical_daily_ohlcv.csv: 25c059e5f5d4f7c25621e3f2714eddbc951d758cb6303125a46cedf04552fde8
+    outputs/diagnostics/final_universe/futures_final/historical/B6_historical_daily_ohlcv.csv: ba6bee0150df340bfc9412b789abacfe070a721a85e1ae20ce7ca7f5168d5170
+    outputs/diagnostics/final_universe/futures_final/historical/J1_historical_daily_ohlcv.csv: 33b8e5fb3c396dceb29ad8b1466956b2444a8dc4740655288d7d418d4ddc36ef
+    outputs/diagnostics/final_universe/futures_final/historical/GC_historical_daily_ohlcv.csv: 21848bfeaa5bb0deecb53c8718943aec130626d9601a96a57b4d2b9d0a2c799c
+    outputs/diagnostics/final_universe/futures_final/historical/E6_historical_daily_ohlcv.csv: f2e84eae147c3fbf9cfcacc6c2205454310f451992faba790ddb1f244f0bb170
+    outputs/diagnostics/final_universe/futures_final/historical/NQ_historical_daily_ohlcv.csv: eb70438df7020dc2b189567b39083096a00f50dc7f61298c094ce998aa7cbe81
+    outputs/diagnostics/final_universe/futures_final/historical/ZF_historical_daily_ohlcv.csv: 77369a78442e2e5d528a67bdd0955f68b61a9d88ca2578f4d813ba51822bb1a5
+    outputs/diagnostics/final_universe/futures_final/historical/ES_historical_daily_ohlcv.csv: caa119dc3a4889183d2ba6fab23746afc483432dbc7c1b0a84b6b202927d6e05

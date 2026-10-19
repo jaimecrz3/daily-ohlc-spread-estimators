@@ -1,0 +1,10 @@
+variant,analysis_role,asset_class,estimator,design_N,negative_N,raw_computable_N,negative_rate,denominator_policy
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,stocks_and_etfs,CS,23148,9704,22767,0.42623094830236746,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,stocks_and_etfs,AR,23148,10982,23128,0.4748356969906607,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,stocks_and_etfs,EDGE,23148,8611,23060,0.37341717259323504,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,etfs,CS,8649,3999,8294,0.48215577525922354,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,etfs,AR,8649,4066,8640,0.4706018518518518,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,etfs,EDGE,8649,3186,8577,0.37145855194123817,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,stocks,CS,14499,5705,14473,0.39418227043460236,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,stocks,AR,14499,6916,14488,0.47736057426836004,Design-eligible AND finite computable RAW estimate; NOT common-defined
+Bloomberg unadjusted,ROBUSTNESS_SENSITIVITY,stocks,EDGE,14499,5425,14483,0.37457709038182696,Design-eligible AND finite computable RAW estimate; NOT common-defined

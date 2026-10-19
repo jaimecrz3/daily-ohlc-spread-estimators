@@ -1,0 +1,20 @@
+{
+  "current_index_raw_excerpts_removed": true,
+  "local_originals_unchanged": [
+    {
+      "relative_path": "notebooks/01_initial_exploratory_analysis.ipynb",
+      "local_file_retained": true,
+      "local_sha256": "38e0c94b5d3769a8bd57450247501bdb77b858735f277336b06fca04b416a4a9",
+      "contents_match_historical_git_blob": true
+    },
+    {
+      "relative_path": "outputs/diagnostics/pilot_schema.csv",
+      "local_file_retained": true,
+      "local_sha256": "8eb182c20abf18c633213320c9d7db3843993222f819ab080b79b5c06a67a7ea",
+      "contents_match_historical_git_blob": true
+    }
+  ],
+  "code_only_notebook": "notebooks/01_initial_exploratory_analysis_code_only.ipynb",
+  "historical_git_blobs_still_present": true,
+  "publication_policy": "Use a clean release/export excluding old Git history, or separately authorize history cleanup before publishing; no history rewrite was performed"
+}

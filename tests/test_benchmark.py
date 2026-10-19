@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from benchmark import build_roll_benchmark, summarize_roll_benchmark
+from benchmark import build_roll_benchmark, summarize_roll_benchmark, MIN_ROLL_PAIRS, COVARIANCE_DDOF
 from benchmark_diagnostics import read_window
 
 
@@ -18,6 +18,79 @@ def bars(closes, times=None):
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_percentage_spread_constant_price_scaling(self):
+        data=bars([100,110,99,108.9,98.01])
+        base=build_roll_benchmark(data,'TEST','stocks').iloc[0]
+        for scale in [.01,17,10000]:
+            scaled=build_roll_benchmark(data.assign(close=data.close*scale),'TEST','stocks').iloc[0]
+            self.assertAlmostEqual(base.roll_autocovariance,scaled.roll_autocovariance)
+            self.assertAlmostEqual(base.roll_spread_bps,scaled.roll_spread_bps)
+
+    def test_ddof_one_independent_numpy_pandas(self):
+        data=bars([100,110,99,108.9,98.01])
+        returns=pd.Series([.1,-.1,.1,-.1])
+        x,y=returns.iloc[1:].to_numpy(),returns.iloc[:-1].to_numpy()
+        row=build_roll_benchmark(data,'TEST','stocks').iloc[0]
+        self.assertEqual(MIN_ROLL_PAIRS,2)
+        self.assertEqual(COVARIANCE_DDOF,1)
+        self.assertAlmostEqual(row.roll_autocovariance,np.cov(x,y,ddof=1)[0,1])
+        self.assertAlmostEqual(row.roll_autocovariance,pd.Series(x).cov(pd.Series(y),ddof=1))
+        self.assertNotAlmostEqual(row.roll_autocovariance,np.cov(x,y,ddof=0)[0,1])
+
+    def test_three_closes_one_pair_not_enough_for_sample_covariance(self):
+        day,audit=build_roll_benchmark(bars([100,110,99]),'TEST','stocks',return_bar_audit=True)
+        row=day.iloc[0]
+        self.assertEqual(audit.one_minute_return.notna().sum(),2)
+        self.assertEqual(row.roll_pairs,1)
+        self.assertFalse(row.benchmark_defined)
+        self.assertEqual(row.failure_reason,'insufficient_covariance_pairs')
+        self.assertFalse(row.insufficient_minute_bars)
+        self.assertFalse(row.insufficient_consecutive_returns)
+
+    def test_gap_count_and_structural_failure_flags(self):
+        data=bars([100,110,99],['2024-11-04 09:30','2024-11-04 09:32','2024-11-04 09:35'])
+        row=build_roll_benchmark(data,'TEST','stocks').iloc[0]
+        self.assertEqual(row.gaps_gt_one_minute,2)
+        self.assertEqual(row.max_gap_minutes,3)
+        self.assertEqual(row.failure_reason,'insufficient_consecutive_returns')
+        short=build_roll_benchmark(bars([100,110]),'TEST','stocks').iloc[0]
+        self.assertEqual(short.failure_reason,'insufficient_minute_bars')
+
+    def test_invalid_price_return_and_source_reason_diagnostics(self):
+        invalid=build_roll_benchmark(bars([100,0,99,110]),'TEST','stocks').iloc[0]
+        self.assertEqual(invalid.failure_reason,'invalid_price')
+        for closes in [[1e-308,1e308,100,110],[1e308,1e-308,100,110]]:
+            row,audit=build_roll_benchmark(bars(closes),'TEST','stocks',return_bar_audit=True)
+            self.assertEqual(row.iloc[0].failure_reason,'invalid_return')
+            self.assertGreater(row.iloc[0].invalid_return_rows,0)
+            self.assertTrue(audit.loc[audit.invalid_return,'one_minute_return'].isna().all())
+        data=bars([100,110,99,108.9]).assign(malformed_columns=[False,True,False,False])
+        row=build_roll_benchmark(data,'TEST','stocks').iloc[0]
+        self.assertEqual(row.failure_reason,'source_quality_condition')
+
+    def test_quality_flags_do_not_blanket_exclude_defined_day(self):
+        data=bars([100,110,99,108.9,98.01,0])
+        row=build_roll_benchmark(data,'TEST','stocks').iloc[0]
+        self.assertTrue(row.benchmark_defined)
+        self.assertTrue(row.invalid_price)
+        self.assertEqual(row.failure_reason,'')
+        self.assertEqual(row.roll_pairs,3)
+
+    def test_sensitivity_is_separated_not_silently_primary(self):
+        with self.assertRaises(NotImplementedError):
+            build_roll_benchmark(bars([100,110,99,108.9]),'TEST','stocks',return_mode='successive_observed_bars')
+        row=build_roll_benchmark(bars([100,110,99,108.9]),'TEST','stocks').iloc[0]
+        self.assertEqual(row.benchmark_mode,'exact_one_minute')
+        self.assertEqual(row.benchmark_role,'primary_candidate')
+
+    def test_futures_trade_date_boundary_and_empty_days(self):
+        data=bars([100,110,99,108.9],['2024-11-03 18:00','2024-11-03 18:01','2024-11-04 18:00','2024-11-04 18:01']).assign(selected_contract='Z24',source_contract='Z24')
+        daily=build_roll_benchmark(data,'ES','futures',futures_root='ES')
+        self.assertEqual(len(daily),2)
+        self.assertEqual(daily.roll_pairs.tolist(),[0,0])
+        self.assertTrue(daily.insufficient_minute_bars.all())
+        self.assertTrue(build_roll_benchmark(bars([]),'TEST','stocks').empty)
+
     def test_hand_calculated_negative_covariance_and_bps(self):
         # Returns [+0.10, -0.10, +0.10, -0.10]. Three paired vectors:
         # x=[-.1,.1,-.1], y=[.1,-.1,.1], means=-1/30,+1/30.

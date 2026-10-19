@@ -1,0 +1,8 @@
+relative_path,ignored,tracked,licensed_distribution_permitted
+data/raw_bloomberg/test.xlsx,True,False,False
+data/analytic/primary_provider_panel.parquet,True,False,False
+data/analytic/primary_horse_race_common.parquet,True,False,False
+data/analytic/cross_fitted_error_predictions.parquet,True,False,False
+data/analytic/error_model/test.joblib,True,False,False
+data/interim/bloomberg/daily_adjusted.parquet,True,False,False
+outputs/diagnostics/provider_run/test.csv,True,False,False

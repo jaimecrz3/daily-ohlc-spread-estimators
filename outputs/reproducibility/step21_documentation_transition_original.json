@@ -1,0 +1,16 @@
+{
+  "approval": "Explicit user Step21 documentation authorization; no analytic supersession",
+  "authorized_document_paths": [
+    "README.md",
+    "design_decisions.md",
+    "data_manifest.csv",
+    "manifests/data_manifest.csv"
+  ],
+  "authorized_document_sha256": {
+    "README.md": "e4ef45057bc41ca9be638a50cd18bd0cc3d340196832985fcaf69a708f7c367d",
+    "design_decisions.md": "7acee34504e757414f6651899a6ab24184bb50a8be2e67e108603144129b2f7f",
+    "data_manifest.csv": "ab3daacb1039dac2a486030162c034905cd8d70f54a82194e7296af7c365ae76",
+    "manifests/data_manifest.csv": "ab3daacb1039dac2a486030162c034905cd8d70f54a82194e7296af7c365ae76"
+  },
+  "historical_test_snapshot": "outputs/reproducibility/historical_test_global_design_freeze.py.txt"
+}

@@ -1,0 +1,41 @@
+status: ROBUSTNESS_SENSITIVITY_COMPLETE
+step: 19
+role: ROBUSTNESS_SENSITIVITY_ONLY
+primary_N: 24377
+primary_reference: outputs/results/primary
+primary_panel_sha256: ccc9193f78565e9dde3efcd4fbf6f5dab3f4a24b647a802384134506db494445
+thresholds:
+  R25: 0.25
+  R50: 0.5
+threshold_selection: USER_PREDECLARED; no optimization
+coverage_denominator: max(expected_minute_slots-2,1)
+expected_slots: Frozen regular session envelope; no newly inferred holiday/early-close
+  rules
+weighting: Primary ASSET_DAY unchanged; equal-asset sensitivity averages asset mean
+  signed/absolute/squared error then square-roots aggregate MSE
+unadjusted_policy: Same frozen grid and kernels; verified incoming SNDL split edge
+  only; heuristic flags diagnostic; paired adjusted comparison on identical unadjusted
+  common sample
+edge_convention: sqrt(abs(raw s2)) sensitivity; published zero-floor remains primary
+influence: All nine leave-one-asset-out per class; one max-absolute-error observation
+  per class/method; deterministic asset/date tie break
+cross_fitted_model_run: false
+raw_provider_writes: 0
+new_intraday_reads: 0
+fx_substitute: false
+winsorization: false
+frozen_formulas_changed: false
+primary_observations_deleted: 0
+new_HAC_inference: false
+unadjusted_source_sha256: 6a224a7ae9a32075803ce9768738339987ffb7687b5dfe90408aac3eae7dae0d
+boundary_source_sha256: de06a9275e751c1c66f6bb77dcca346500c3152943f08a913c44cb5d7069e883
+tests:
+  status: PASSED
+  passed: 304
+  failed: 0
+raw_bloomberg_hashes_verified: 11
+processing_seconds: 304.0648241999734
+unadjusted_common_N: 12880
+R25_N: 16150
+R50_N: 12908
+primary_artifacts_unchanged: true

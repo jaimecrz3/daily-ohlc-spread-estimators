@@ -1,0 +1,85 @@
+status: FROZEN_FOR_PRIMARY_PROVIDER_RUN
+approval_step: 16
+approval_date: '2026-10-16'
+primary_weighting: ASSET_DAY_WEIGHTED
+bias_definition: (1/N)*sum_(i,t) Error_(i,t)
+mae_definition: (1/N)*sum_(i,t) abs(Error_(i,t))
+rmse_definition: sqrt((1/N)*sum_(i,t) Error_(i,t)^2)
+error_definition: Estimate_(i,t) - RollBenchmark_(i,t); not calculated in Step16
+accuracy_sample: design_eligible AND benchmark_defined AND cs_defined AND ar_defined
+  AND edge_defined
+failure_rate_denominator: ALL design_eligible asset-days; Step14 unchanged
+negative_rate_denominator: 'For each estimator separately: design_eligible AND finite
+  computable RAW mathematical estimate; report denominator count. Numerator additionally
+  raw_negative=True. Undefined is not negative.'
+imdx_identity_policy: source_defined_history_retained_without_manual_stitching
+imdx_identity_continuity_certified: false
+fx_status: IN_SCOPE_BUT_BLOCKED_OFFICIAL_SOURCE_ACCESS
+substitute_fx_allowed: false
+global_design_reference: outputs/diagnostics/design_freeze/global_design_final_spec.yaml
+estimator_spec_reference: outputs/diagnostics/estimator_freeze/estimator_formula_spec.yaml
+existing_windows_adjacency_negative_and_failure_policies: Step14 and Step15 unchanged;
+  this step resolves only weighting, inference convention and IMDX treatment
+provider_estimation_executed: false
+hac_inference_executed: false
+precedence: Step16 resolves earlier pending weighting/HAC/identity decisions; earlier
+  frozen artifacts are preserved unchanged
+hac_target: SIGNED_ERROR_BIAS_ONLY
+hac_regression_unit: One observation per distinct contributing date within estimator/reporting
+  cell
+hac_date_aggregation: daily_mean_error_t=mean(Error_(i,t)) over common-defined contributing
+  assets in the cell
+hac_weights: n_t = number of contributing asset-days on date t; count weights, not
+  inverse estimated variances
+hac_model: daily_mean_error_t = alpha + u_t; intercept-only WLS with weights n_t
+intercept_identity: alpha=sum_t(n_t*daily_mean_error_t)/sum_t(n_t)=pooled asset-day
+  mean error
+hac_kernel: BARTLETT
+hac_lag_formula: floor(4*(T/100)^(2/9))
+hac_T_definition: Number of distinct contributing dates in the eventual reporting-cell
+  common-defined accuracy sample
+hac_small_sample_cap: L=min(floor(4*(T/100)^(2/9)), T-1)
+hac_lag_inputs:
+- T
+significance_based_lag_selection: false
+hac_time_order: Sort distinct contributing date labels chronologically; lags index
+  that date series, not stacked asset rows or elapsed calendar days
+hac_date_policy: No dates with no contributing asset-days are synthesized into this
+  regression; do not modify estimator scheduled-adjacency grids
+sandwich_specification:
+  score: g_t=n_t*(daily_mean_error_t-alpha)
+  bread: 1/sum_t(n_t)
+  bartlett_weight: w_l=1-l/(L+1), l=1,...,L
+  meat: sum_t(g_t^2)+2*sum_(l=1)^L w_l*sum_(t=l+1)^T g_t*g_(t-l)
+  variance_alpha: meat/(sum_t(n_t))^2
+  finite_sample_multiplier: 1 (uncorrected asymptotic Newey-West sandwich; no implicit
+    package degrees-of-freedom correction)
+confidence_level: 0.95
+confidence_interval: alpha +/- 1.959963984540054 * HAC_SE
+p_value_sidedness: TWO_SIDED
+null_hypothesis: alpha=0
+reference_distribution: ASYMPTOTIC_STANDARD_NORMAL
+p_value_definition: 2*(1-Phi(abs(alpha/HAC_SE)))
+no_inference_metrics:
+- MAE
+- RMSE
+no_inference_metrics_role: Primary descriptive accuracy measures; no separate primary
+  significance tests
+reporting_fields:
+- alpha_bias
+- HAC_standard_error
+- 95_percent_confidence_interval
+- two_sided_p_value
+- T_dates
+- N_asset_days
+- HAC_lag
+empty_or_degenerate_cells: Preserve/report the cell and reason; no inference for T<2
+  or nonfinite/nonpositive HAC variance. No invented SE, CI, p-value or zero-variance
+  significance.
+dependence_rationale: Date aggregation accommodates common-date cross-sectional shocks
+  in the aggregate score; HAC addresses serial correlation across contributing dates;
+  n_t weights retain asset-day point weighting
+limitation: This convention does not eliminate every form of panel dependence; small
+  T and irregular temporal support remain limitations
+execution_status: SPECIFICATION_ONLY; no weighted regression, HAC covariance, confidence
+  interval or p-value calculated

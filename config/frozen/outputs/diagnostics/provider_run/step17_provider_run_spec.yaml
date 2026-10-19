@@ -1,0 +1,55 @@
+status: PROVIDER_RUN_VALIDATED_FOR_HORSE_RACE
+step: 17
+primary_panel: data/analytic/primary_provider_panel.parquet
+primary_panel_sha256: 792817001bb30b95c9fd65ac61ba9a55de7d4db360a1b998f88bef439f83c27f
+design_rows:
+  stocks: 14499
+  etfs: 8649
+  futures: 2331
+  crypto: 12753
+total_design_rows: 38232
+tests:
+  status: PASSED
+  passed: 272
+  failed: 0
+asset_classes_processed:
+- stocks
+- etfs
+- futures
+- crypto
+fx_status: IN_SCOPE_BUT_BLOCKED_OFFICIAL_SOURCE_ACCESS
+substitute_fx_allowed: false
+frozen_references:
+  design_freeze/global_design_final_spec.yaml: a59db28611752f89c8fa249f4906dfcf1a7577cb234044f0f68d2cfaf3728de1
+  estimator_freeze/estimator_formula_spec.yaml: f81b00cb38ed2fb6735db07a7b71522fcb2b82c7311f8461521d6729d6a9496a
+  statistical_freeze/primary_weighting_spec.yaml: 982bff23c188d2229278a2b463bcd1248ff0793afc1bc24aeb14c85a7119f467
+  statistical_freeze/hac_inference_spec.yaml: 49a1598273f12e17709d2c3aeb9b7d7da8b6b74040bc889094ff77955db022f3
+benchmark_minimum_pairs: 2
+benchmark_ddof: 1
+benchmark_interface_extension: Only optional frozen root-specific session registry
+  forwarding; all other source bytes match Step10 hash after removing that forwarding
+estimator_kernels_and_mapping: Unchanged Step15 code; exact scheduled contexts only
+futures_window_admission: Reject mixed selected contracts BEFORE method kernel; invalid_scheduled_adjacency
+  with futures_contract_boundary detail; no contract substitution or stitching
+common_defined_accuracy_sample: design_eligible AND benchmark_defined AND cs_defined
+  AND ar_defined AND edge_defined
+extra_primary_filters: false
+extreme_value_diagnostic: Finite relative spread>1 flagged only; no exclusions
+observation_level_outputs_ignored: true
+raw_to_final_reproductions: 5
+benchmark_processing_seconds: 798.2118090999138
+estimator_audit_test_seconds: 1953.4828340999957
+total_processing_seconds_approx: 2751.6946431999095
+raw_source_bytes_scanned: 2331082185
+raw_source_files_scanned: 74
+raw_bloomberg_hashes_verified: 11
+raw_provider_writes: 0
+estimator_error_columns_created: false
+accuracy_or_rankings_calculated: false
+HAC_or_hypothesis_tests_calculated: false
+common_source_mechanical_link:
+  crypto: true
+  futures: true
+crypto_quote_currency: UNKNOWN
+imdx_identity_continuity_certified: false
+imdx_identity_policy: source_defined_history_retained_without_manual_stitching
